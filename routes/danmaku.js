@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
-const { bilibili, mgtv, tencentvideo, youku, iqiyi } = require('./api/base');
+const {bilibili, mgtv, tencentvideo, youku, iqiyi} = require('./api/base');
 const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
 const memory = require('../utils/memory')
 
@@ -11,10 +11,10 @@ function getscheme(req) {
 
 async function build_response(url) {
     try {
-        const res = await axios.get(url)
-    } catch (error) {
-        console.log(error)
-        return {'msg': '传入的链接非法！请检查链接是否能在浏览器正常打开'}
+        await axios.get(url)
+    } catch (e) {
+        console.log(e)
+        return {msg: '传入的链接非法！请检查链接是否能在浏览器正常打开'}
     }
     var fc = undefined
     for (var item of list) {
@@ -25,7 +25,14 @@ async function build_response(url) {
     if (fc === undefined) {
         return {'msg': '不支持的视频网址'}
     }
-    return await fc.work(url)
+    let ret;
+    try {
+        ret = await fc.work(url)
+    } catch (e) {
+        console.log(e)
+        return {msg: '弹幕解析过程中程序报错退出，请等待管理员修复！或者换条链接试试！'}
+    }
+    return ret
 }
 
 /* GET home page. */

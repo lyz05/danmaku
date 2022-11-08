@@ -24,7 +24,7 @@ function Bilibili() {
             // 获取视频分P信息
             const p = q.query.p || 1;
             // 判断是否为旧版av号
-            var params = {};
+            var params;
             if (url.indexOf('BV') !== -1) {
                 params = {'bvid': path.slice(-1)[0]};
             } else {
@@ -72,7 +72,7 @@ function Bilibili() {
     }
 
     this.work = async (url) => {
-        urls = await this.resolve(url);
+        const urls = await this.resolve(url);
         console.log(this.name,'api lens:',urls.length);
         if (!this.error_msg)
             this.content = await this.parse(urls);

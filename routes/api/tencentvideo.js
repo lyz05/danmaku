@@ -60,7 +60,7 @@ function Tencentvideo() {
     }
 
     this.work = async (url) => {
-        promises = await this.resolve(url);
+        const promises = await this.resolve(url);
         console.log(this.name, 'api lens:', promises.length)
         this.content = await this.parse(promises);
         return {

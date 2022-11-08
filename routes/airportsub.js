@@ -112,7 +112,7 @@ router.get('/cache', async function (req, res, next) {
             for (let i = 0; i < values.length; i++) {
                 const res = values[i];
                 const key = Object.keys(database.suburl)[i]
-                messages.push({title: 'Upload', key, status: res.status})
+                messages.push({title: 'Upload', key, status: res.res.status})
             }
             res.json(messages);
         })
