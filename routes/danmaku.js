@@ -4,6 +4,7 @@ const router = express.Router();
 const {bilibili, mgtv, tencentvideo, youku, iqiyi} = require('./api/base');
 const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
 const memory = require('../utils/memory')
+const leancloud = require('../utils/leancloud')
 
 function getscheme(req) {
     return req.headers['x-forwarded-proto'] || req.protocol;
@@ -37,6 +38,7 @@ async function build_response(url) {
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
+    leancloud.danmakuAccessAdd({ip: req.ip, url: req.query.url, ua: req.headers['user-agent']})
     //检查是否包含URL参数
     if (!req.query.url) {
         var urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
@@ -57,6 +59,13 @@ router.get('/', async function (req, res, next) {
             res.end(ret.content);
         }
     }
+});
+
+router.get('/pageinfo', async function (req, res, next) {
+    const today_visited = await leancloud.danmakuQuery(leancloud.currentDay());
+    const lastday_visited = await leancloud.danmakuQuery(leancloud.lastDay());
+    const month_visited = await leancloud.danmakuQuery(leancloud.currentMonth());
+    res.json({today_visited, lastday_visited, month_visited})
 });
 
 module.exports = router;

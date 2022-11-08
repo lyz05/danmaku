@@ -12,91 +12,100 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <!-- Cloudflare Web Analytics -->
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
-        data-cf-beacon='{"token": "938fe927c5c44a888fb536713a2f1025"}'></script>
+            data-cf-beacon='{"token": "938fe927c5c44a888fb536713a2f1025"}'></script>
     <!-- End Cloudflare Web Analytics -->
 </head>
 
 <body>
-    <div class="container">
-        <div class="row text-center">
-            <div class="page-header">
-                <h1>
-                    主流视频网站弹幕文件解析接口
-                </h1>
-            </div>
+<div class="container">
+    <div class="row text-center">
+        <div class="page-header">
+            <h1>
+                主流视频网站弹幕文件解析接口
+            </h1>
         </div>
-        <div class="row">
-            <div class="col-sm-8">
-                <p>
-                    这是一个弹幕文件解析接口！输入你要解析的视频地址，即可获得B站弹幕形式的XML文件。<br />
-                    通过使用<a href="https:///www.dandanplay.com/">弹弹Play播放器</a>
-                    或者<a href='https://tiansh.github.io/us-danmaku/bilibili/'>bilibili ASS 弹幕在线转换项目</a>
-                    转换为普通字幕文件，即可在本地播放器中播放。
-                </p>
-                <p>
-                    使用方法：在当前页面添加一个查询字符串url<br />
-                    目前支持芒果TV，腾讯视频，优酷视频，爱奇艺视频，哔哩哔哩。<br />
-                    <strong>温馨提示：点击提交按钮，耐心等待就好，切勿疯狂刷新。</strong><br />
-                    <!-- 会对弹幕文本进行去重，去除包含xml标签的非法弹幕文本 -->
-                    例子:<br />
-                    <% urls.forEach(function(url) { %>
-                    <%= path %>?url=<%= url %><br />
-                    <% }); %>
-                </p>
-            </div>
-            <div class="col-sm-4">
-
-            </div>
-        </div>
-        <div class="row">
-            <p>在下方直接输入视频网址，点击提交按钮也可解析。</p>
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-1 control-label">视频网址</label>
-                    <div class="col-sm-5">
-                        <input type="text" class="form-control" placeholder="URL" name="url">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-1 col-sm-5">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="download" checked='checked'> 强制下载
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-1 col-sm-5">
-                        <button type="submit" class="btn btn-primary">提交</button>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-        <hr />
-        <footer class="footer">
-            <div class="row">
-                Powered by <a href="https://fly.io/"><strong>Fly.io</strong> </a>
-                <span class="post-meta-divider">|</span>
-                Reference blog：
-<!--                <a href="https://lxmymjr.github.io/contents/%E4%B8%BB%E6%B5%81%E8%A7%86%E9%A2%91%E7%BD%91%E7%AB%99%E5%BC%B9%E5%B9%95%E4%B8%8B%E8%BD%BD">主流视频网站弹幕下载</a>-->
-                <a href="https://blog.home999.cc/2020/%E5%9F%BA%E4%BA%8E%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%BC%B9%E5%B9%95%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%E6%8E%A5%E5%8F%A3">主流视频网站弹幕下载</a>
-
-            </div>
-            <!--
-        <div class="row">
-            今日访问量：{{ getpageinfo.today_visited }}<span class="post-meta-divider">|</span>
-            昨日访问量：{{ getpageinfo.lastday_visited }}<span class="post-meta-divider">|</span>
-            当月访问量：{{ getpageinfo.month_visited }}
-        </div>
-        -->
-        </footer>
     </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <p>
+                这是一个弹幕文件解析接口！输入你要解析的视频地址，即可获得B站弹幕形式的XML文件。<br/>
+                通过使用<a href="https:///www.dandanplay.com/">弹弹Play播放器</a>
+                或者<a href='https://tiansh.github.io/us-danmaku/bilibili/'>bilibili ASS 弹幕在线转换项目</a>
+                转换为普通字幕文件，即可在本地播放器中播放。
+            </p>
+            <p>
+                使用方法：在当前页面添加一个查询字符串url<br/>
+                目前支持芒果TV，腾讯视频，优酷视频，爱奇艺视频，哔哩哔哩。<br/>
+                <strong>温馨提示：点击提交按钮，耐心等待就好，切勿疯狂刷新。</strong><br/>
+                <!-- 会对弹幕文本进行去重，去除包含xml标签的非法弹幕文本 -->
+                例子:<br/>
+                <% urls.forEach(function(url) { %>
+                    <%= path %>?url=<%= url %><br/>
+                <% }); %>
+            </p>
+        </div>
+        <div class="col-sm-4">
+
+        </div>
+    </div>
+    <div class="row">
+        <p>在下方直接输入视频网址，点击提交按钮也可解析。</p>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-1 control-label">视频网址</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" placeholder="URL" name="url">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-5">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="download" checked='checked'> 强制下载
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-5">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <hr/>
+    <footer class="footer">
+        <div class="row">
+            Powered by <a href="https://fly.io/"><strong>Fly.io</strong> </a>
+            <span class="post-meta-divider">|</span>
+            Reference blog：
+            <!--                <a href="https://lxmymjr.github.io/contents/%E4%B8%BB%E6%B5%81%E8%A7%86%E9%A2%91%E7%BD%91%E7%AB%99%E5%BC%B9%E5%B9%95%E4%B8%8B%E8%BD%BD">主流视频网站弹幕下载</a>-->
+            <a href="https://blog.home999.cc/2020/%E5%9F%BA%E4%BA%8E%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%BC%B9%E5%B9%95%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%E6%8E%A5%E5%8F%A3">主流视频网站弹幕下载</a>
+
+        </div>
+
+        <div class="row">
+            今日访问量：<span id="today_visited"></span><span class="post-meta-divider"> | </span>
+            昨日访问量：<span id="lastday_visited"></span><span class="post-meta-divider"> | </span>
+            当月访问量：<span id="month_visited"></span>
+        </div>
+
+    </footer>
+</div>
 
 </body>
 <script>
-
+    $.ajax({
+        url: 'pageinfo',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            $('#today_visited').text(data.today_visited);
+            $('#lastday_visited').text(data.lastday_visited);
+            $('#month_visited').text(data.month_visited);
+        }
+    });
 </script>
 
 </html>
