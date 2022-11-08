@@ -1,13 +1,13 @@
 const urlmodule = require('url');
 const axios = require('axios');
-const convert = require('xml-js');
 const {time_to_second, make_response, content_template} = require('./utils');
 
 function Mgtv() {
     this.name = '芒果TV'
     this.domain = 'mgtv.com'
     this.example_urls = [
-        'https://www.mgtv.com/b/336727/8087768.html'
+        'https://www.mgtv.com/b/336727/8087768.html',
+        'https://www.mgtv.com/b/459529/17730031.html' //api lens 90
     ];
 
     this.resolve = async (url) => {

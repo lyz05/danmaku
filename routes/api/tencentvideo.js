@@ -1,6 +1,5 @@
 const urlmodule = require('url');
 const axios = require('axios');
-const convert = require('xml-js');
 const cheerio = require("cheerio");
 const {make_response, content_template} = require('./utils');
 
@@ -9,7 +8,8 @@ function Tencentvideo() {
     this.name = '腾讯视频'
     this.domain = 'v.qq.com'
     this.example_urls = [
-        'https://v.qq.com/x/cover/mzc002003pn34qk/u3319i5s3jt.html'
+        'https://v.qq.com/x/cover/mzc002003pn34qk/u3319i5s3jt.html',
+        'https://v.qq.com/x/cover/53q0eh78q97e4d1/x00174aq5no.html'//api lens 50
     ];
 
     this.resolve = async (url) => {

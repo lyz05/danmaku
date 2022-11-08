@@ -1,10 +1,10 @@
 const urlmodule = require('url');
 const axios = require('axios');
-const convert = require('xml-js');
 const cookie = require('cookie');
 const crypto = require('crypto');
 const {make_response, content_template} = require('./utils');
 
+//资源消耗大 256M内存扛不住
 function Youku() {
     this.name = '优酷'
     this.domain = 'v.youku.com'
@@ -48,7 +48,6 @@ function Youku() {
         const q = urlmodule.parse(url, true);
         const path = q.pathname.split('/');
         const video_id = path.slice(-1)[0].split('.')[0].slice(3);
-        const duration = 0
         if (video_id) {
             // "?client_id=53e6cc67237fc59a&package=com.huawei.hwvplayer.youku&ext=show&video_id={}"
             api_url = "https://openapi.youku.com/v2/videos/show.json"

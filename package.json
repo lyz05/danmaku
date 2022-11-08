@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www",
+    "start": "node --max-old-space-size=128 ./bin/www",
+    "dev": "nodemon --max-old-space-size=128 ./bin/www",
     "test": "nyc -a mocha --recursive"
   },
   "dependencies": {

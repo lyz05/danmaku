@@ -1,10 +1,9 @@
 const axios = require('axios');
-const convert = require('xml-js');
 const pako = require('pako');
 const cheerio = require('cheerio');
 const {time_to_second, make_response, content_template} = require('./utils');
 
-
+//资源消耗大 256M内存扛不住
 function Iqiyi() {
     this.name = '爱奇艺'
     this.domain = 'iqiyi.com'
@@ -57,7 +56,7 @@ function Iqiyi() {
         for (const data of datas) {
             const xml = pako.inflate(data, {to: 'string'})
             const $ = cheerio.load(xml, {xmlMode: true});
-            $('bulletInfo').each(function (i, elem) {
+            $('bulletInfo').each(function () {
                 var content = JSON.parse(JSON.stringify(content_template));
                 content.timepoint = $(this).find('showTime').text()//showTime
                 content.color = parseInt($(this).find('color').text(), 16)//color
