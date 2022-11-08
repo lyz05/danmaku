@@ -99,7 +99,7 @@ router.get('/cache', async function (req, res, next) {
             const key = Object.keys(database.suburl)[i]
             messages.push({title: 'Download', key, status: res.status})
             const userinfo = res.headers['subscription-userinfo']
-            const base64userinfo = btoa(userinfo)
+            const base64userinfo = Buffer.from(userinfo).toString('base64')
             // 设置强制下载并设置文件名
             headers = {
                 'Content-type': 'text/plain; charset=utf-8',

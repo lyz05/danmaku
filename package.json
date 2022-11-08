@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node --max-old-space-size=200 ./bin/www",
     "dev": "nodemon --max-old-space-size=200 ./bin/www",
-    "test": "nyc -a mocha --recursive"
+    "test": "nyc -a mocha --recursive",
+    "deploy": "flyctl deploy"
   },
   "dependencies": {
     "ali-oss": "^6.17.1",

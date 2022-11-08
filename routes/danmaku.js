@@ -10,6 +10,13 @@ function getscheme(req) {
     return req.headers['x-forwarded-proto'] || req.protocol;
 }
 
+function getClientIp(req) {
+    return req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+}
+
 async function build_response(url) {
     try {
         await axios.get(url)
@@ -38,7 +45,7 @@ async function build_response(url) {
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-    leancloud.danmakuAccessAdd({ip: req.ip, url: req.query.url, ua: req.headers['user-agent']})
+    leancloud.danmakuAccessAdd({ip: getClientIp(req), url: req.query.url, ua: req.headers['user-agent']})
     //检查是否包含URL参数
     if (!req.query.url) {
         var urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
