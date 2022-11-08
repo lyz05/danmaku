@@ -1,14 +1,15 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
-const { bilibili, mgtv, tencentvideo, youku, iqiyi } = require('../routes/api/base');
+const { bilibili, mgtv, tencentvideo, youku, iqiyi } = require('./api/base');
 const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
+const memory = require('../utils/memory')
 
 function getscheme(req) {
     return req.headers['x-forwarded-proto'] || req.protocol;
 }
 
-async function build_response(url, download) {
+async function build_response(url) {
     try {
         const res = await axios.get(url)
     } catch (error) {
@@ -37,7 +38,8 @@ router.get('/', async function (req, res, next) {
     } else {
         url = req.query.url;
         download = (req.query.download === 'on');
-        ret = await build_response(url, download)
+        ret = await build_response(url)
+        memory() //显示内存使用量
         if (ret.msg !== 'ok') {
             res.status(403).send(ret.msg)
         } else if (download) {

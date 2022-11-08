@@ -9,7 +9,8 @@ function Tencentvideo() {
     this.domain = 'v.qq.com'
     this.example_urls = [
         'https://v.qq.com/x/cover/mzc002003pn34qk/u3319i5s3jt.html',
-        'https://v.qq.com/x/cover/53q0eh78q97e4d1/x00174aq5no.html'//api lens 50
+        'https://v.qq.com/x/cover/53q0eh78q97e4d1/x00174aq5no.html',//api lens 50
+        'https://v.qq.com/x/cover/mzc00200fph94nw/l00448ijvve.html',//api lens 91
     ];
 
     this.resolve = async (url) => {

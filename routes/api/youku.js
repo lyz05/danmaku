@@ -9,7 +9,8 @@ function Youku() {
     this.name = '优酷'
     this.domain = 'v.youku.com'
     this.example_urls = [
-        'https://v.youku.com/v_show/id_XNTE5NjUxNjUyOA==.html'
+        'https://v.youku.com/v_show/id_XNTE5NjUxNjUyOA==.html',
+        'https://v.youku.com/v_show/id_XMTc1OTE4ODI5Ng==.html'
     ];
 
     this.get_tk_enc = async () => {

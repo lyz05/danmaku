@@ -8,7 +8,8 @@ function Iqiyi() {
     this.name = '爱奇艺'
     this.domain = 'iqiyi.com'
     this.example_urls = [
-        'https://www.iqiyi.com/v_19rr1lm35o.html'
+        'https://www.iqiyi.com/v_19rr1lm35o.html', //api lens 11
+        'https://www.iqiyi.com/v_1wozsa91cfs.html' //api lens 9
     ];
 
     this.resolve = async (url) => {

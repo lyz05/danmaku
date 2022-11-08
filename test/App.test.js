@@ -4,7 +4,6 @@ let app = require('../app');
 const { bilibili, mgtv, tencentvideo, youku, iqiyi } = require('../routes/api/base');
 const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
 
-let should = chai.should();
 chai.use(chaiHttp);
 
 describe('App', () => {
@@ -76,5 +75,8 @@ describe('App', () => {
                     done();
                 });
         });
+    });
+    describe('airportsub modules',()=>{
+
     });
 });
