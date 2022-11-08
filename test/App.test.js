@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 describe('App', () => {
 
     describe('弹幕解析模块测试', function () {
-        this.timeout(1000*30);
+        this.timeout(1000*10);
         it('主页测试', (done) => {
             chai.request(app)
                 .get('/')

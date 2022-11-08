@@ -30,7 +30,7 @@ function Bilibili() {
             } else {
                 params = {'aid': path.slice(-1)[0].substring(2)};
             }
-            response = await axios.get(api_video_info, {params})
+            const response = await axios.get(api_video_info, {params})
             if (response.data.code !== 0) {
                 this.error_msg = '获取普通投稿视频信息失败！'
                 return
@@ -44,7 +44,7 @@ function Bilibili() {
         else if (url.indexOf('bangumi/') !== -1) {
             const epid = path.slice(-1)[0];
             const params = {'ep_id': epid.slice(2)};
-            response = await axios.get(api_epid_cid, {params})
+            const response = await axios.get(api_epid_cid, {params})
             if (response.data.code !== 0) {
                 this.error_msg = '获取番剧视频信息失败！'
                 return
