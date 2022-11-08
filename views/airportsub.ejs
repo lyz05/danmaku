@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订阅信息</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h3>温馨提示：</h3>
+    <p>
+        带filter的是过滤无效节点并精选的结果（建议优先使用）。强烈建议使用clash作为客户端，具有自动测试节点的功能和完善的规则。</p>
+    <p>
+        相关软件<a href="/sub/download">下载链接</a><br>
+    </p>
+    <p>
+    <p class="card-heading">Telegram 代理</p>
+    <p>
+        <a href="tg://proxy?server=vipserv.ccloud.live&amp;port=443&amp;secret=dddd561961fea026e517764b084bd64072">域名</a>
+        <a href="tg://proxy?server=167.235.77.32&amp;port=443&amp;secret=dddd561961fea026e517764b084bd64072">IPV4</a>
+        <a href="tg://proxy?server=2a01:4f8:1c1e:eeb6::1&amp;port=443&amp;secret=dddd561961fea026e517764b084bd64072">IPV6</a>
+    </p>
+    </p>
+    <h3>Your Subscribe:</h3>
+    <p>
+        当前账户过期时间：<%= expire %><br>
+        <% for (const index in ret) { %>
+            <%= index %>:
+            <a href="<%= path %>&ctype=<%= index %>">
+                <%= path %>&ctype=<%= index %>
+            </a>
+
+        <br>
+        <% if (ret[index]) { %>
+        过去已用：<%= ret[index].total_use %> 总量:<%= ret[index].total %> 过期时间：<%= ret[index].expire %> 用量比：<%= ret[index].use_percent %>%
+        日期比：<%= ret[index].date_percent %>%<br>
+        <% } %>
+
+        <% }; %>
+    </p>
+</div>
+</body>
+</html>
