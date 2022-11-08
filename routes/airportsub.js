@@ -12,6 +12,8 @@ function getscheme(req) {
 }
 
 function getuserinfo(headers) {
+    if (!headers)
+        return undefined
     const str = headers["subscription-userinfo"]
     if (str === undefined) {
         return undefined
