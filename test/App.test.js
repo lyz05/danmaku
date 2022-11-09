@@ -7,6 +7,7 @@ const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
 let should = chai.should();
 chai.use(chaiHttp);
 
+//TODO: add more test cases
 describe('App', () => {
 
     describe('弹幕解析模块测试', function () {
@@ -19,7 +20,30 @@ describe('App', () => {
                     done();
                 });
         });
-
+        it('页面统计计数测试', (done) => {
+            chai.request(app)
+                .get('/pageinfo')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+        it('传入无法打开的url测试', (done) => {
+            chai.request(app)
+                .get('/?url=ababa')
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    done();
+                });
+        });
+        it('传入不支持的网址', (done) => {
+            chai.request(app)
+                .get('/?url=https://tv.sohu.com/v/MjAyMDA2MjYvbjYwMDg3NDcwOS5zaHRtbA==.html')
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    done();
+                });
+        });
         for (const item of list) {
             const name = item.name;
             const example_urls = item.example_urls;
@@ -114,6 +138,32 @@ describe('App', () => {
         it('接口带user与ctype参数测试', (done) =>{
             chai.request(app)
                 .get('/sub?user=congcong&ctype=v2ray')
+                .end((err,res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+        it('接口带user与错误ctype参数测试', (done) =>{
+            chai.request(app)
+                .get('/sub?user=congcong&ctype=abaaba')
+                .end((err,res) => {
+                    res.should.have.status(404);
+                    done();
+                });
+        });
+        it('接口带user与ctype参数测试，带Mozilla UA', (done) =>{
+            chai.request(app)
+                .get('/sub?user=congcong&ctype=v2ray')
+                .set('User-Agent','Mozilla/5.0 ')
+                .end((err,res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+        it('接口带user,订阅过期测试', (done) =>{
+            chai.request(app)
+                .get('/sub?user=test&ctype=v2ray')
+                .set('User-Agent','Mozilla/5.0 ')
                 .end((err,res) => {
                     res.should.have.status(200);
                     done();

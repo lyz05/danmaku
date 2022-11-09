@@ -18,7 +18,7 @@ function getuserinfo(headers) {
     if (str === undefined) {
         return undefined
     }
-    var dic = cookie.parse(str);
+    const dic = cookie.parse(str);
     dic['total_use'] = 1 * dic.upload + 1 * dic.download
     dic['use_percent'] = (100.0 * dic.total_use / dic.total).toFixed(2)
     const now_time = Math.floor(Date.now() / 1000)
@@ -87,6 +87,7 @@ router.get('/', async function (req, res, next) {
     }
 });
 
+// TODO: 定时任务
 router.get('/cache', async function (req, res, next) {
     const database = await updateDatabase();
     let messages = [];
@@ -107,7 +108,7 @@ router.get('/cache', async function (req, res, next) {
             const userinfo = res.headers['subscription-userinfo']
             const base64userinfo = Buffer.from(userinfo).toString('base64')
             // 设置强制下载并设置文件名
-            headers = {
+            const headers = {
                 'Content-type': 'text/plain; charset=utf-8',
                 'content-disposition': `attachment; filename=${key}`,
                 'x-oss-persistent-headers': "Subscription-Userinfo:" + base64userinfo

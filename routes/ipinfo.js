@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var libqqwry = require('lib-qqwry');
-var dns = require('dns');
-var qqwry = libqqwry() //初始化IP库解析器
+const express = require('express');
+const router = express.Router();
+const libqqwry = require('lib-qqwry');
+const dns = require('dns');
+const qqwry = libqqwry(); //初始化IP库解析器
 
 function getClientIp(req) {
     return req.headers['x-forwarded-for'] ||
@@ -13,14 +13,15 @@ function getClientIp(req) {
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    var ip = req.query.name || getClientIp(req);
+    let ip = req.query.name || getClientIp(req);
     dns.lookup(ip, (err, address, family) => {
+        let ipL;
         if (err) {
             ipL = { 'ip': ip, 'msg': '域名解析IP失败' };
         } else {
             ip = address
             try {
-                var ipL = qqwry.searchIP(ip); //查询IP信息
+                ipL = qqwry.searchIP(ip); //查询IP信息
             } catch (e) {
                 ipL = { 'ip': ip, 'msg': e };
             }

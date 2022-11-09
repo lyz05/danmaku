@@ -35,13 +35,13 @@ function Youku() {
     }
 
     const yk_msg_sign = (msg) => {
-        var md5 = crypto.createHash('md5');
+        const md5 = crypto.createHash('md5');
         return md5.update(msg + "MkmC9SoIw6xCkSKHhJ7b5D2r51kBiREr").digest('hex');
     }
 
     const yk_t_sign = (token, t, appkey, data) => {
         const text = [token, t, appkey, data].join('&');
-        var md5 = crypto.createHash('md5');
+        const md5 = crypto.createHash('md5');
         return md5.update(text).digest('hex')
     }
 
@@ -101,7 +101,7 @@ function Youku() {
             msg['sign'] = yk_msg_sign(msg_b64encode)
             const data = JSON.stringify(msg)
             const t = Date.now()
-            params = {
+            const params = {
                 "jsv": "2.5.6",
                 "appKey": "24679788",
                 "t": t,
@@ -130,7 +130,7 @@ function Youku() {
             // 接口请求情况
             // console.log(i, res.ret[0])
             for (danmu of danmus) {
-                var content = JSON.parse(JSON.stringify(content_template));
+                const content = JSON.parse(JSON.stringify(content_template));
                 content.timepoint = danmu["playat"] / 1000
                 if (danmu.propertis.color) {
                     content.color = JSON.parse(danmu.propertis).color

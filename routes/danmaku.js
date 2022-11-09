@@ -24,8 +24,8 @@ async function build_response(url,req) {
         console.log(e)
         return {msg: '传入的链接非法！请检查链接是否能在浏览器正常打开'}
     }
-    var fc = undefined
-    for (var item of list) {
+    let fc = undefined;
+    for (let item of list) {
         if (url.indexOf(item.domain) !== -1) {
             fc = item
         }
@@ -49,13 +49,13 @@ router.get('/', async function (req, res, next) {
     leancloud.danmakuAccessAdd({ip: getClientIp(req), url: req.query.url, ua: req.headers['user-agent']})
     //检查是否包含URL参数
     if (!req.query.url) {
-        var urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
+        const urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
         const path = getscheme(req) + '://' + req.headers.host + req.originalUrl;
         res.render('danmaku', {path, urls});
     } else {
-        url = req.query.url;
-        download = (req.query.download === 'on');
-        ret = await build_response(url,req)
+        const url = req.query.url;
+        const download = (req.query.download === 'on');
+        const ret = await build_response(url,req)
         memory() //显示内存使用量
         if (ret.msg !== 'ok') {
             res.status(403).send(ret.msg)

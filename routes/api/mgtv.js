@@ -38,7 +38,7 @@ function Mgtv() {
             if (data.data.items === null)
                 continue;
             for (const item of data.data.items) {
-                var content = JSON.parse(JSON.stringify(content_template));
+                const content = JSON.parse(JSON.stringify(content_template));
                 content.timepoint = item.time / 1000;
                 content.content = item.content;
                 content.uid = item.uid;

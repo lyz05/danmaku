@@ -1,6 +1,6 @@
 const axios = require('axios');
 const pako = require('pako');
-var xml2js = require('xml2js');
+const xml2js = require('xml2js');
 const {time_to_second, make_response, content_template} = require('./utils');
 const memory = require('../../utils/memory')
 
@@ -35,7 +35,7 @@ function Iqiyi() {
         console.log('tvid', tvid)
         let promises = []
         for (let i = 0; i < page; i++) {
-            const api_url = `http://cmts.iqiyi.com/bullet/${tvid.slice(-4, -2)}/${tvid.slice(-2)}/${tvid}_300_${i + 1}.z`
+            const api_url = `https://cmts.iqiyi.com/bullet/${tvid.slice(-4, -2)}/${tvid.slice(-2)}/${tvid}_300_${i + 1}.z`
             const params = {
                 rn: '0.0123456789123456',
                 business: 'danmu',
@@ -67,7 +67,7 @@ function Iqiyi() {
                     continue
                 for (const bulletInfo of entry.list[0].bulletInfo){
                     // console.log(bulletInfo)
-                    var content = JSON.parse(JSON.stringify(content_template));
+                    const content = JSON.parse(JSON.stringify(content_template));
                     content.timepoint = bulletInfo['showTime'][0]//showTime
                     content.color = parseInt(bulletInfo['color'][0], 16)//color
                     content.content = bulletInfo['content'][0] //content

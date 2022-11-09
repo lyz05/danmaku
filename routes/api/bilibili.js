@@ -1,3 +1,5 @@
+// noinspection EqualityComparisonWithCoercionJS
+
 const urlmodule = require('url');
 const axios = require('axios');
 const got = require('got');
@@ -17,14 +19,14 @@ function Bilibili() {
         // 相关API
         const api_video_info = "https://api.bilibili.com/x/web-interface/view"
         const api_epid_cid = "https://api.bilibili.com/pgc/view/web/season"
-        var q = urlmodule.parse(url, true);
-        var path = q.pathname.split('/');
+        const q = urlmodule.parse(url, true);
+        const path = q.pathname.split('/');
         // 普通投稿视频
         if (url.indexOf('video/') !== -1) {
             // 获取视频分P信息
             const p = q.query.p || 1;
             // 判断是否为旧版av号
-            var params;
+            let params;
             if (url.indexOf('BV') !== -1) {
                 params = {'bvid': path.slice(-1)[0]};
             } else {
@@ -49,7 +51,7 @@ function Bilibili() {
                 this.error_msg = '获取番剧视频信息失败！'
                 return
             }
-            for (var i = 0; i < response.data.result.episodes.length; i++) {
+            for (let i = 0; i < response.data.result.episodes.length; i++) {
                 if (response.data.result.episodes[i].id == params.ep_id) {
                     this.title = response.data.result.episodes[i].share_copy;
                     const cid = response.data.result.episodes[i].cid;

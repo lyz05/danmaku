@@ -11,9 +11,9 @@ const content_template = {
 };
 
 function time_to_second(time) {
-    var t = time.split(':');
-    var s = 0;
-    var m = 1;
+    const t = time.split(':');
+    let s = 0;
+    let m = 1;
     while (t.length > 0) {
         s += m * parseInt(t.pop(), 10);
         m *= 60;

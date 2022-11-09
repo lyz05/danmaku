@@ -9,15 +9,6 @@ AV.init({
     serverURL: "https://dbvunek8.lc-cn-e1-shared.com"
 });
 
-function test() {
-    const TestObject = AV.Object.extend('TestObject');
-    const testObject = new TestObject();
-    testObject.set('words', 'Hello world!');
-    testObject.set('number', 123);
-    testObject.save().then((testObject) => {
-        console.log('保存成功。')
-    })
-}
 
 function danmakuAccessAdd(obj) {
     const {ip, url, ua} = obj;
@@ -44,9 +35,9 @@ function lastDay() {
 }
 
 function currentMonth() {
-    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-    var firstDay = new Date(y, m, 1);
-    var lastDay = new Date(y, m + 1, 0);
+    const date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    const firstDay = new Date(y, m, 1);
+    const lastDay = new Date(y, m + 1, 0);
     return [firstDay, lastDay]
 }
 
@@ -65,6 +56,7 @@ function danmakuErrorAdd(obj) {
     const record = new DanmakuErrorObject();
     record.set('remoteIP', ip);
     record.set('url', url);
+    //TODO: 转换成object
     record.set('error', JSON.stringify(error));
     record.save().then()
 }

@@ -45,7 +45,7 @@ function Tencentvideo() {
 
         for (const data of datas) {
             for (const item of data.barrage_list) {
-                var content = JSON.parse(JSON.stringify(content_template));
+                const content = JSON.parse(JSON.stringify(content_template));
                 content.timepoint = item.time_offset / 1000;
                 if (item.content_style.color) {
                     const content_style = JSON.stringify(item.content_style.color)
