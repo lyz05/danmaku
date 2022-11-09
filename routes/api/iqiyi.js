@@ -61,6 +61,7 @@ function Iqiyi() {
         for (const xml of datas) {
             const json = await xml2js.parseStringPromise(xml)
             // console.log(json)
+            global.gc()
             for (const entry of json.danmu.data[0].entry) {
                 if (!entry.list[0].bulletInfo)
                     continue
@@ -74,6 +75,7 @@ function Iqiyi() {
                     contents.push(content);
                 }
             }
+            memory()
             // $('bulletInfo').each(function () {
             // })
         }

@@ -33,7 +33,7 @@ function currentDay() {
     const date = new Date();
     const start = new Date(date.setHours(0, 0, 0, 0))
     const end = new Date(date.setHours(23, 59, 59, 999))
-    return [start,end]
+    return [start, end]
 }
 
 function lastDay() {
@@ -55,11 +55,21 @@ async function danmakuQuery(date) {
     query.greaterThanOrEqualTo('createdAt', date[0]);
     query.lessThan('createdAt', date[1]);
 
-    // query.exists('url');
+    query.exists('url');
     return await query.count()
 }
 
-module.exports = {danmakuAccessAdd, danmakuQuery, currentDay, currentMonth, lastDay};
+function danmakuErrorAdd(obj) {
+    const {ip, url, error} = obj;
+    const DanmakuErrorObject = AV.Object.extend('DanmakuError');
+    const record = new DanmakuErrorObject();
+    record.set('remoteIP', ip);
+    record.set('url', url);
+    record.set('error', JSON.stringify(error));
+    record.save().then()
+}
+
+module.exports = {danmakuAccessAdd, danmakuQuery, currentDay, currentMonth, lastDay, danmakuErrorAdd};
 
 if (!module.parent) {
 }

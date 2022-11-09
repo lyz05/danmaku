@@ -17,7 +17,7 @@ function getClientIp(req) {
         req.connection.socket.remoteAddress;
 }
 
-async function build_response(url) {
+async function build_response(url,req) {
     try {
         await axios.get(url)
     } catch (e) {
@@ -38,6 +38,7 @@ async function build_response(url) {
         ret = await fc.work(url)
     } catch (e) {
         console.log(e)
+        leancloud.danmakuErrorAdd({ip: getClientIp(req), url: url, error: e})
         return {msg: '弹幕解析过程中程序报错退出，请等待管理员修复！或者换条链接试试！'}
     }
     return ret
@@ -54,7 +55,7 @@ router.get('/', async function (req, res, next) {
     } else {
         url = req.query.url;
         download = (req.query.download === 'on');
-        ret = await build_response(url)
+        ret = await build_response(url,req)
         memory() //显示内存使用量
         if (ret.msg !== 'ok') {
             res.status(403).send(ret.msg)
@@ -69,9 +70,12 @@ router.get('/', async function (req, res, next) {
 });
 
 router.get('/pageinfo', async function (req, res, next) {
-    const today_visited = await leancloud.danmakuQuery(leancloud.currentDay());
-    const lastday_visited = await leancloud.danmakuQuery(leancloud.lastDay());
-    const month_visited = await leancloud.danmakuQuery(leancloud.currentMonth());
+    const promises = [
+        leancloud.danmakuQuery(leancloud.currentDay()),
+        leancloud.danmakuQuery(leancloud.lastDay()),
+        leancloud.danmakuQuery(leancloud.currentMonth())
+    ]
+    const [today_visited, lastday_visited, month_visited] = await Promise.all(promises)
     res.json({today_visited, lastday_visited, month_visited})
 });
 
