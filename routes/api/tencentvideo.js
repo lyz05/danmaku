@@ -24,11 +24,10 @@ function Tencentvideo() {
         } else {
             vid = path.slice(-1)[0].split('.')[0];
         }
-        console.log('vid:', vid)
         let res = await axios.get(url);
-        //TODO 腾讯视频标题获取
         const $ = whacko.load(res.data, null, false);
-        this.title = $("title")[0].children[0].data;
+        this.title = $("title")[0].children[0].data.split('_')[0];
+        console.log('vid:', vid,'title:', this.title)
         try {
             res = await axios.get(api_danmaku_base + vid);
         } catch (e) {
