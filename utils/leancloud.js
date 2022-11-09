@@ -9,17 +9,6 @@ AV.init({
     serverURL: "https://dbvunek8.lc-cn-e1-shared.com"
 });
 
-
-function danmakuAccessAdd(obj) {
-    const {ip, url, ua} = obj;
-    const DanmakuAccessObject = AV.Object.extend('DanmakuAccess');
-    const record = new DanmakuAccessObject();
-    record.set('remoteIP', ip);
-    record.set('url', url);
-    record.set('UA', ua);
-    record.save().then()
-}
-
 function currentDay() {
     const date = new Date();
     const start = new Date(date.setHours(0, 0, 0, 0))
@@ -50,20 +39,21 @@ async function danmakuQuery(date) {
     return await query.count()
 }
 
-function danmakuErrorAdd(obj) {
-    let {ip, url, err} = obj;
-    const DanmakuErrorObject = AV.Object.extend('DanmakuError');
-    const record = new DanmakuErrorObject();
-    record.set('remoteIP', ip);
-    record.set('url', url);
-    //TODO: 转换成object
-    err = JSON.stringify(err, Object.getOwnPropertyNames(err))
-    err = JSON.parse(err)
-    record.set('err', err);
-    record.save().then()
+//TODO 订阅access.log
+function add(className,obj) {
+    const classInstance = AV.Object.extend(className);
+    const record = new classInstance();
+    for (const key of Object.keys(obj)){
+        record.set(key, obj[key]);
+    }
+    record.save().then((obj) => {
+        // 成功保存之后，执行其他逻辑
+        console.log(`${className}添加一条记录。objectId：${obj.id}`);
+    });
 }
 
-module.exports = {danmakuAccessAdd, danmakuQuery, currentDay, currentMonth, lastDay, danmakuErrorAdd};
+module.exports = {danmakuQuery, currentDay, currentMonth, lastDay, add};
 
 if (!module.parent) {
+
 }

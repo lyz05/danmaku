@@ -6,6 +6,7 @@ const cookie = require('cookie');
 const {filesize} = require('filesize');
 const moment = require('moment');
 const axios = require('axios');
+const leancloud = require('../utils/leancloud')
 
 function getscheme(req) {
     return req.headers['x-forwarded-proto'] || req.protocol;
@@ -45,6 +46,12 @@ async function updateDatabase() {
 // TODO TG代理 日志生成
 router.get('/', async function (req, res, next) {
     const database = await updateDatabase();
+    leancloud.add('SubAccess',{
+        ip: req.ip,
+        ua: req.headers['user-agent'],
+        user: req.query.user,
+        ctype: req.query.ctype
+    })
     if (req.query.user) {
         const userinfo = database.user[req.query.user]
         if (userinfo) {

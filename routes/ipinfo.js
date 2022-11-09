@@ -4,16 +4,9 @@ const libqqwry = require('lib-qqwry');
 const dns = require('dns');
 const qqwry = libqqwry(); //初始化IP库解析器
 
-function getClientIp(req) {
-    return req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
-}
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    let ip = req.query.name || getClientIp(req);
+    let ip = req.query.name || req.ip;
     dns.lookup(ip, (err, address, family) => {
         let ipL;
         if (err) {
