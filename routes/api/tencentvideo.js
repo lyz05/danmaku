@@ -28,7 +28,14 @@ function Tencentvideo() {
         let res = await axios.get(url);
         const $ = whacko.load(res.data, null, false);
         this.title = $("title")[0].children[0].data;
-        res = await axios.get(api_danmaku_base + vid);
+        try {
+            res = await axios.get(api_danmaku_base + vid);
+        } catch (e) {
+            if (e.response.status === 404) {
+                this.error_msg = '好像没有弹幕哦'
+                return
+            } else throw e
+        }
 
         let promises = []
         let list = Object.values(res.data.segment_index)
@@ -61,12 +68,14 @@ function Tencentvideo() {
 
     this.work = async (url) => {
         const promises = await this.resolve(url);
-        console.log(this.name, 'api lens:', promises.length)
-        this.content = await this.parse(promises);
+        if (!this.error_msg) {
+            console.log(this.name, 'api lens:', promises.length)
+            this.content = await this.parse(promises)
+        }
         return {
             title: this.title,
             content: this.content,
-            msg: 'ok'
+            msg: this.error_msg ? this.error_msg : 'ok'
         }
     }
 

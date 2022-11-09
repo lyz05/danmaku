@@ -38,7 +38,7 @@ async function build_response(url,req) {
         ret = await fc.work(url)
     } catch (e) {
         console.log(e)
-        leancloud.danmakuErrorAdd({ip: getClientIp(req), url: url, error: e})
+        leancloud.danmakuErrorAdd({ip: getClientIp(req), url: url, err: e})
         return {msg: '弹幕解析过程中程序报错退出，请等待管理员修复！或者换条链接试试！'}
     }
     return ret

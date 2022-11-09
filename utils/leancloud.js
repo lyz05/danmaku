@@ -51,13 +51,15 @@ async function danmakuQuery(date) {
 }
 
 function danmakuErrorAdd(obj) {
-    const {ip, url, error} = obj;
+    let {ip, url, err} = obj;
     const DanmakuErrorObject = AV.Object.extend('DanmakuError');
     const record = new DanmakuErrorObject();
     record.set('remoteIP', ip);
     record.set('url', url);
     //TODO: 转换成object
-    record.set('error', JSON.stringify(error));
+    err = JSON.stringify(err, Object.getOwnPropertyNames(err))
+    err = JSON.parse(err)
+    record.set('err', err);
     record.save().then()
 }
 

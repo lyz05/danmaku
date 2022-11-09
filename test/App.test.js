@@ -101,7 +101,7 @@ describe('App', () => {
                 });
         });
     });
-    describe('airportsub modules',function (){
+    describe('机场订阅模块',function (){
         this.timeout(1000*5);
         it('接口不带参数测试',  (done) =>{
             chai.request(app)

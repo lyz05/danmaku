@@ -62,10 +62,8 @@ function Iqiyi() {
             const json = await xml2js.parseStringPromise(xml)
             // console.log(json)
             global.gc()
-            for (const entry of json.danmu.data[0].entry) {
-                if (!entry.list[0].bulletInfo)
-                    continue
-                for (const bulletInfo of entry.list[0].bulletInfo){
+            for (const entry of json.danmu.data[0].entry??[]) {
+                for (const bulletInfo of entry.list[0].bulletInfo??[]){
                     // console.log(bulletInfo)
                     const content = JSON.parse(JSON.stringify(content_template));
                     content.timepoint = bulletInfo['showTime'][0]//showTime
@@ -76,8 +74,6 @@ function Iqiyi() {
                 }
             }
             memory()
-            // $('bulletInfo').each(function () {
-            // })
         }
         contents = make_response(contents)
         return contents
