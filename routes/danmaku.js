@@ -6,10 +6,6 @@ const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
 const memory = require('../utils/memory')
 const leancloud = require('../utils/leancloud')
 
-function getscheme(req) {
-    return req.headers['x-forwarded-proto'] || req.protocol;
-}
-
 async function build_response(url, req) {
     try {
         await axios.get(url)
@@ -45,7 +41,7 @@ router.get('/', async function (req, res, next) {
     //检查是否包含URL参数
     if (!req.query.url) {
         const urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
-        const path = getscheme(req) + '://' + req.headers.host + req.originalUrl;
+        const path = req.protocol + '://' + req.headers.host + req.originalUrl;
         res.render('danmaku', {path, urls});
     } else {
         const url = req.query.url;

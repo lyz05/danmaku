@@ -63,18 +63,6 @@ describe('App', () => {
         }
 
     });
-    describe('users modules', () => {
-        it('should GET the users response', (done) => {
-            chai.request(app)
-                .get('/users')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.text.should.equal('respond with a resource');
-                    done();
-                });
-        });
-    });
-
     it('should respond status 404', (done) => {
         chai.request(app)
             .get('/wrongUrl')

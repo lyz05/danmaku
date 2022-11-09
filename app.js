@@ -4,14 +4,16 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+
 // 引入环境变量
 require('dotenv').config();
 
 // 引入一个个路由模块
 const danmakuRouter = require('./routes/danmaku');
-const usersRouter = require('./routes/users');
 const ipinfoRouter = require('./routes/ipinfo');
 const airportsubRouter = require('./routes/airportsub');
+// 引入定时任务模块
+const schedule = require('./schedule/schedule');
 
 const app = express();
 
@@ -27,7 +29,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', danmakuRouter);
-app.use('/users', usersRouter);
 app.use('/ipinfo', ipinfoRouter);
 app.use('/sub', airportsubRouter);
 

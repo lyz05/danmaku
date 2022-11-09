@@ -39,7 +39,6 @@ async function danmakuQuery(date) {
     return await query.count()
 }
 
-//TODO 订阅access.log
 function add(className,obj) {
     const classInstance = AV.Object.extend(className);
     const record = new classInstance();

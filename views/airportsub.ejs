@@ -17,11 +17,11 @@
         相关软件<a href="/sub/download">下载链接</a><br>
     </p>
 
-    <p class="card-heading">Telegram 代理</p>
+    <h3 class="card-heading">Telegram 代理:</h3>
     <p>
-        <a href="tg://proxy?server=vipserv.ccloud.live&amp;port=443&amp;secret=dddd561961fea026e517764b084bd64072">域名</a>
-        <a href="tg://proxy?server=167.235.77.32&amp;port=443&amp;secret=dddd561961fea026e517764b084bd64072">IPV4</a>
-        <a href="tg://proxy?server=2a01:4f8:1c1e:eeb6::1&amp;port=443&amp;secret=dddd561961fea026e517764b084bd64072">IPV6</a>
+        <% for (const tgproxy of tgproxys) { %>
+            <a href="<%= tgproxy.url %>"><%= tgproxy.name %></a>
+        <% } %>
     </p>
 
     <h3>Your Subscribe:</h3>

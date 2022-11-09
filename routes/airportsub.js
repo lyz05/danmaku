@@ -8,10 +8,8 @@ const moment = require('moment');
 const axios = require('axios');
 const leancloud = require('../utils/leancloud')
 
-function getscheme(req) {
-    return req.headers['x-forwarded-proto'] || req.protocol;
-}
 
+// TODO 迁移到leancloud
 function getuserinfo(headers) {
     if (!headers)
         return undefined
@@ -43,10 +41,9 @@ async function updateDatabase() {
 }
 
 /* GET users listing. */
-// TODO TG代理 日志生成
 router.get('/', async function (req, res, next) {
     const database = await updateDatabase();
-    leancloud.add('SubAccess',{
+    leancloud.add('SubAccess', {
         ip: req.ip,
         ua: req.headers['user-agent'],
         user: req.query.user,
@@ -74,7 +71,8 @@ router.get('/', async function (req, res, next) {
                         res.status(404).send('Not Found 找不到这种订阅类型');
                     }
                 } else {
-                    const path = getscheme(req) + '://' + req.headers.host + req.originalUrl;
+                    const path = req.protocol + '://' + req.headers.host + req.originalUrl;
+                    const tgproxys = database.telegram;
                     const ctypes = Object.keys(database.suburl)
                     let ret = {}
                     for (key of ctypes) {
@@ -82,7 +80,7 @@ router.get('/', async function (req, res, next) {
                         ret[key] = getuserinfo(headers)
                         // ret[key] = getuserinfotxt(getuserinfo(headers))
                     }
-                    res.render('airportsub', {ret, path, expire: userinfo.expire});
+                    res.render('airportsub', {ret, path, tgproxys, expire: userinfo.expire});
                 }
             } else {
                 res.send('您的订阅已过期，请联系管理员');
