@@ -10,7 +10,8 @@ function Iqiyi() {
     this.domain = 'iqiyi.com'
     this.example_urls = [
         'https://www.iqiyi.com/v_19rr1lm35o.html', //api lens 11
-        'https://www.iqiyi.com/v_1wozsa91cfs.html' //api lens 9
+        'https://www.iqiyi.com/v_1wozsa91cfs.html', //api lens 9
+        'https://www.iqiyi.com/v_1zzwhiozqww.html', //api lens 10
     ];
 
     this.resolve = async (url) => {
@@ -98,7 +99,7 @@ module.exports = Iqiyi
 if (!module.parent) {
     const m = new Iqiyi();
 
-    m.work(m.example_urls[1]).then(() => {
+    m.work(m.example_urls[2]).then(() => {
         // console.log(m.content);
         console.log(m.title);
         memory();

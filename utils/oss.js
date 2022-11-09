@@ -39,9 +39,12 @@ async function head(objname) {
     }
 }
 
-async function signurl(objname) {
+async function signurl(objname, isFast) {
     try {
-        const result = await client.signatureUrl(objname);
+        let result = await client.signatureUrl(objname);
+        if (isFast) {
+            result = result.replace("http://","//").replace(normalendpoint, fastendpoint)
+        }
         return result
     } catch (e) {
         console.log(e);
@@ -54,5 +57,5 @@ if (!module.parent) {
     get('SUB/database.yaml');
     put('SUB/test.txt', '中文');
     head('SUB/database.yaml');
-    signurl('SUB/database.yaml');
+    signurl('SUB/database.yaml',true);
 }
