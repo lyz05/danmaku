@@ -1,7 +1,8 @@
 const axios = require('axios');
 const pako = require('pako');
-const cheerio = require('cheerio');
+var xml2js = require('xml2js');
 const {time_to_second, make_response, content_template} = require('./utils');
+const memory = require('../../utils/memory')
 
 //资源消耗大 256M内存扛不住
 function Iqiyi() {
@@ -29,7 +30,7 @@ function Iqiyi() {
         const albumid = page_info.albumId
         const tvid = page_info.tvId.toString()
         const categoryid = page_info.cid
-        page = Math.floor(duration / (60 * 5)) + 1
+        const page = Math.floor(duration / (60 * 5)) + 1
         console.log('tvid', tvid)
         let promises = []
         for (let i = 0; i < page; i++) {
@@ -52,19 +53,28 @@ function Iqiyi() {
     this.parse = async (promises) => {
         let contents = [];
         const values = await Promise.all(promises)
-        let datas = values.map(value => value.data)
+        const datas = values
+            .map(value => value.data)
+            .map(value => pako.inflate(value, {to: 'string'}));
 
-        for (const data of datas) {
-            const xml = pako.inflate(data, {to: 'string'})
-            const $ = cheerio.load(xml, {xmlMode: true});
-            $('bulletInfo').each(function () {
-                var content = JSON.parse(JSON.stringify(content_template));
-                content.timepoint = $(this).find('showTime').text()//showTime
-                content.color = parseInt($(this).find('color').text(), 16)//color
-                content.content = $(this).find('content').text() //content
-                content.size = $(this).find('font').text()//font
-                contents.push(content);
-            })
+        for (const xml of datas) {
+            const json = await xml2js.parseStringPromise(xml)
+            // console.log(json)
+            for (const entry of json.danmu.data[0].entry) {
+                if (!entry.list[0].bulletInfo)
+                    continue
+                for (const bulletInfo of entry.list[0].bulletInfo){
+                    // console.log(bulletInfo)
+                    var content = JSON.parse(JSON.stringify(content_template));
+                    content.timepoint = bulletInfo['showTime'][0]//showTime
+                    content.color = parseInt(bulletInfo['color'][0], 16)//color
+                    content.content = bulletInfo['content'][0] //content
+                    content.size = bulletInfo['font'][0]//font
+                    contents.push(content);
+                }
+            }
+            // $('bulletInfo').each(function () {
+            // })
         }
         contents = make_response(contents)
         return contents
@@ -88,8 +98,9 @@ module.exports = Iqiyi
 if (!module.parent) {
     const m = new Iqiyi();
 
-    m.work(m.example_urls[0]).then(() => {
-        console.log(m.content);
+    m.work(m.example_urls[1]).then(() => {
+        // console.log(m.content);
         console.log(m.title);
+        memory();
     });
 }

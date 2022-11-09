@@ -1,6 +1,6 @@
 const urlmodule = require('url');
 const axios = require('axios');
-const cheerio = require("cheerio");
+const whacko = require("whacko");
 const {make_response, content_template} = require('./utils');
 
 
@@ -26,7 +26,7 @@ function Tencentvideo() {
         }
         console.log('vid:', vid)
         let res = await axios.get(url);
-        const $ = cheerio.load(res.data, null, false);
+        const $ = whacko.load(res.data, null, false);
         this.title = $("title")[0].children[0].data;
         res = await axios.get(api_danmaku_base + vid);
 
