@@ -93,7 +93,6 @@ router.get('/', async function (req, res, next) {
     }
 });
 
-// TODO: 定时任务
 router.get('/cache', async function (req, res, next) {
     const database = await updateDatabase();
     let messages = [];
