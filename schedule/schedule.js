@@ -19,7 +19,7 @@ function subcache() {
 cron.schedule('0 12 * * *', () => {
     subcache();
 });
-
+//TODO 添加自动删除一个月前的日志
 console.log('schedule.js loaded');
 if (!module.parent) {
     subcache();
