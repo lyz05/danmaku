@@ -12,6 +12,7 @@ function Iqiyi() {
         'https://www.iqiyi.com/v_19rr1lm35o.html', //api lens 11
         'https://www.iqiyi.com/v_1wozsa91cfs.html', //api lens 9
         'https://www.iqiyi.com/v_1zzwhiozqww.html', //api lens 10
+        'http://www.iqiyi.com/v_2ga8zts86ys.html'
     ];
 
     this.resolve = async (url) => {
@@ -31,7 +32,7 @@ function Iqiyi() {
         const albumid = page_info.albumId
         const tvid = page_info.tvId.toString()
         const categoryid = page_info.cid
-        const page = Math.floor(duration / (60 * 5)) + 1
+        const page = Math.round(duration / (60 * 5))
         console.log('tvid', tvid)
         let promises = []
         for (let i = 0; i < page; i++) {
