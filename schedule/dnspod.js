@@ -1,5 +1,5 @@
 const axios = require("axios");
-const token = "359232,18633dc7590e5c7554cc966e3469b9ed";
+const token = process.env.DNSPOD_TOKEN;
 const querystring = require("querystring");
 // 创建实例时配置默认值
 const instance = axios.create({
