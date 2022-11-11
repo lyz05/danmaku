@@ -26,9 +26,9 @@ function Bilibili() {
 			// 判断是否为旧版av号
 			let params;
 			if (url.indexOf("BV") !== -1) {
-				params = {"bvid": path.slice(-1)[0]};
+				params = {"bvid": path[2]};
 			} else {
-				params = {"aid": path.slice(-1)[0].substring(2)};
+				params = {"aid": path[2].substring(2)};
 			}
 			const response = await axios.get(api_video_info, {params});
 			if (response.data.code !== 0) {
@@ -41,7 +41,7 @@ function Bilibili() {
 			const cid = response.data.data.pages[p - 1].cid;
 			return [`https://comment.bilibili.com/${cid}.xml`];
 		} // 番剧
-		else if (url.indexOf("bangumi/") !== -1) {
+		else if (url.indexOf("bangumi/") !== -1 && url.indexOf("ep") !== -1) {
 			const epid = path.slice(-1)[0];
 			const params = {"ep_id": epid.slice(2)};
 			const response = await axios.get(api_epid_cid, {params});
