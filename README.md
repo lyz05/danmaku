@@ -1,8 +1,10 @@
-# 阿里云函数计算 Django项目
+# Fly.io Express项目
 包含如下子项目
  - airportsub: 用于机场订阅
  - danmaku：用于弹幕解析
  - ipinfo: 用纯真IP数据库查询IP信息
+ - tgbot: Telegram机器人
+ - schedule: 定时任务
 
 # 依赖
 - chai: 断言库

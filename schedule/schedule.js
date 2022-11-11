@@ -16,7 +16,7 @@ function subcache() {
         });
 }
 
-cron.schedule('0 12 * * *', () => {
+cron.schedule('0 12/3 * * *', () => {
     subcache();
 });
 //TODO 添加自动删除一个月前的日志

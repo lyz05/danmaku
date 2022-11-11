@@ -1,6 +1,6 @@
 // Import modules
 const whacko = require('whacko');
-const YAML = require('yaml');
+const yaml = require('js-yaml');
 const TelegramBot = require('node-telegram-bot-api');
 const goindex = require('./goindex');
 const axios = require('axios');
@@ -68,7 +68,7 @@ module.exports = (TOKEN) => {
 
     bot.onText(/\/sub/, async (msg) => {
         const database = await (await client.get("SUB/database.yaml")).content.toString();
-        const data = YAML.parse(database);
+        const data = yaml.load(database);
         const users = data.user;
         for (let user in users) {
             if (users[user].chatID == msg.chat.id) {
@@ -82,6 +82,7 @@ module.exports = (TOKEN) => {
         bot.sendMessage(msg.chat.id, `您已经成功注册，请等待管理员审核`);
     });
 
+    //猜数游戏
     bot.onText(/\/game/, (msg) => {
         const chatID = msg.chat.id;
         const guess = parseInt(msg.text.replace("/game", ""));
