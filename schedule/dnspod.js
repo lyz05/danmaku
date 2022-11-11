@@ -1,0 +1,80 @@
+const axios = require("axios");
+const token = "359232,18633dc7590e5c7554cc966e3469b9ed";
+const querystring = require("querystring");
+// 创建实例时配置默认值
+const instance = axios.create({
+	baseURL: "https://dnsapi.cn"
+});
+
+async function get_record(domain, subdomain) {
+	const api = "/Record.List";
+	const data = querystring.stringify({
+		"domain": domain,
+		"sub_domain": subdomain,
+		"login_token": token,
+		"format": "json"
+	});
+	const res = await instance.post(api, data);
+	return res.data.records;
+}
+
+async function update_record(domain, record) {
+	const {id, line, type, name, value} = record;
+	const api = "/Record.Modify";
+	const data = querystring.stringify({
+		domain,
+		record_id: id,
+		value,
+		record_line: line,
+		record_type: type,
+		sub_domain: name,
+		"login_token": token,
+		"format": "json",
+	});
+	const res = await instance.post(api, data);
+	return res.data;
+}
+
+async function add_record(domain, record) {
+	const {line, type, name, value} = record;
+	const api = "/Record.Create";
+	const data = querystring.stringify({
+		domain,
+		value,
+		record_line: line,
+		record_type: type,
+		sub_domain: name,
+		"login_token": token,
+		"format": "json",
+	});
+	const res = await instance.post(api, data);
+	return res.data;
+}
+
+async function del_record(domain, record) {
+	const {id} = record;
+	const api = "/Record.Remove";
+	const data = querystring.stringify({
+		domain,
+		record_id: id,
+		"login_token": token,
+		"format": "json",
+	});
+	const res = await instance.post(api, data);
+	return res.data;
+}
+
+module.exports = {get_record, update_record, add_record, del_record};
+
+if (!module.parent) {
+	get_record("home999.cc", "gd").then(res => {
+		console.log(res);
+		for (const record of res) {
+			if (record.line !== "默认") {
+				del_record("home999.cc", record).then(res => {
+					console.log(res);
+				});
+			}
+		}
+	});
+}

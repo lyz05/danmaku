@@ -12,14 +12,6 @@ const danmakuRouter = require("./routes/danmaku");
 const ipinfoRouter = require("./routes/ipinfo");
 const airportsubRouter = require("./routes/airportsub");
 const DEBUG = process.env.DEBUG==="true" || false;
-if (!DEBUG) {
-	console.log("PRODUCTION MODE!该模式下TG机器人与定时任务正常运行");
-	// 引入定时任务模块
-	require("./schedule/schedule");
-	// 引入TG机器人
-	require("./tgbot/bot");
-} else
-	console.log("DEBUG MODE!该模式下将关闭TG机器人和定时任务");
 
 const app = express();
 
@@ -53,5 +45,15 @@ app.use(function (err, req, res) {
 	res.status(err.status || 500);
 	res.render("error");
 });
+// 引入定时任务模块
+const schedule = require("./schedule/schedule");
+schedule(app);
+
+if (!DEBUG) {
+	console.log("PRODUCTION MODE!该模式下TG机器人正常运行");
+	// 引入TG机器人
+	require("./tgbot/bot");
+} else
+	console.log("DEBUG MODE!该模式下将关闭TG机器人");
 
 module.exports = app;

@@ -31,6 +31,8 @@
     "node-cron": "^3.0.2",
     "node-telegram-bot-api": "^0.60.0",
     "pako": "^1.0.11",
+    "querystring": "^0.2.1",
+    "tencentcloud-sdk-nodejs": "^4.0.480",
     "whacko": "^0.19.1",
     "xml-js": "^1.6.11",
     "xml2js": "^0.4.23"
