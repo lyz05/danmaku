@@ -18,6 +18,7 @@ async function get_optimization_ip() {
 	return res.data;
 }
 
+//TODO 改进result输出，显示所选线路信息
 async function main() {
 	const cfips = await get_optimization_ip();
 	if (cfips.code !== 200) {

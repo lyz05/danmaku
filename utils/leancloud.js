@@ -52,6 +52,7 @@ function add(className,obj) {
 
 module.exports = {danmakuQuery, currentDay, currentMonth, lastDay, add};
 
+//TODO IP地理信息查询并记录到日志中
 if (!module.parent) {
 
 }
