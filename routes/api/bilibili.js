@@ -32,7 +32,7 @@ function Bilibili() {
 			}
 			const response = await axios.get(api_video_info, {params});
 			if (response.data.code !== 0) {
-				this.error_msg = "获取普通投稿视频信息失败！";
+				this.error_msg = "获取普通投稿视频信息失败！"+response.data.message;
 				return;
 			}
 			this.title = response.data.data.title;
@@ -73,9 +73,10 @@ function Bilibili() {
 
 	this.work = async (url) => {
 		const urls = await this.resolve(url);
-		console.log(this.name,"api lens:",urls.length);
-		if (!this.error_msg)
+		if (!this.error_msg) {
+			console.log(this.name,"api lens:",urls.length);
 			this.content = await this.parse(urls);
+		}
 		return {
 			title: this.title,
 			content: this.content,

@@ -10,9 +10,7 @@ function Iqiyi() {
 	this.domain = "iqiyi.com";
 	this.example_urls = [
 		"https://www.iqiyi.com/v_19rr1lm35o.html", //api lens 11
-		"https://www.iqiyi.com/v_1wozsa91cfs.html", //api lens 9
-		"https://www.iqiyi.com/v_1zzwhiozqww.html", //api lens 10
-		"http://www.iqiyi.com/v_2ga8zts86ys.html"
+		"http://www.iqiyi.com/v_1qzx9b00hs4.html?vfm=m_331_dbdy" //api lens 25
 	];
 
 	this.resolve = async (url) => {
@@ -32,6 +30,7 @@ function Iqiyi() {
 		const albumid = page_info.albumId;
 		const tvid = page_info.tvId.toString();
 		const categoryid = page_info.cid;
+		console.log(duration / (60 * 5));
 		const page = Math.round(duration / (60 * 5));
 		console.log("tvid", tvid);
 		let promises = [];
@@ -54,9 +53,11 @@ function Iqiyi() {
 
 	this.parse = async (promises) => {
 		let contents = [];
-		const values = await Promise.all(promises);
+		const values = await Promise.allSettled(promises);
+		//筛选出成功的请求
 		const datas = values
-			.map(value => value.data)
+			.filter(x => x.status==="fulfilled")
+			.map(x => x.value.data)
 			.map(value => pako.inflate(value, {to: "string"}));
 
 		for (const xml of datas) {
