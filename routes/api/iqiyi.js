@@ -1,7 +1,10 @@
 const axios = require("axios");
 const pako = require("pako");
-const xml2js = require("xml2js");
-const {time_to_second, make_response, content_template} = require("./utils");
+const {
+	time_to_second,
+	make_response,
+	content_template,
+} = require("./utils");
 const memory = require("../../utils/memory");
 
 //资源消耗大 256M内存扛不住
@@ -17,8 +20,11 @@ function Iqiyi() {
 		const res = await axios({
 			method: "get",
 			url: "https://proxy-fc-python-fdssfsqzaa.cn-shenzhen.fcapp.run/",
-			params: {url},
-			auth: {username: "proxy", password: "proxy"}
+			params: { url },
+			auth: {
+				username: "proxy",
+				password: "proxy"
+			}
 		});
 		const data = res.data;
 		const result = data.match(/window.Q.PageInfo.playPageInfo=(.*);/);
@@ -30,7 +36,6 @@ function Iqiyi() {
 		const albumid = page_info.albumId;
 		const tvid = page_info.tvId.toString();
 		const categoryid = page_info.cid;
-		console.log(duration / (60 * 5));
 		const page = Math.round(duration / (60 * 5));
 		console.log("tvid", tvid);
 		let promises = [];
@@ -46,38 +51,61 @@ function Iqiyi() {
 				categoryid: categoryid,
 				qypid: "01010021010000000000"
 			};
-			promises.push(axios({method: "get", url: api_url, params: params, responseType: "arraybuffer"}));
+			promises.push(axios({
+				method: "get",
+				url: api_url,
+				params: params,
+				responseType: "arraybuffer"
+			}));
 		}
 		return promises;
 	};
 
-	this.parse = async (promises) => {
-		let contents = [];
-		const values = await Promise.allSettled(promises);
-		//筛选出成功的请求
-		const datas = values
-			.filter(x => x.status==="fulfilled")
-			.map(x => x.value.data)
-			.map(value => pako.inflate(value, {to: "string"}));
+	function extract(xml, tag) {
+		const reg = new RegExp(`<${tag}>(.*?)</${tag}>`, "g");
+		const res = xml.match(reg)
+			.map(x => x.substring(tag.length + 2, x.length - tag.length - 3));
+		return res;
+	}
 
-		for (const xml of datas) {
-			const json = await xml2js.parseStringPromise(xml);
-			// console.log(json)
+	this.xml2json = (xml, contents) => {
+		const danmaku = extract(xml, "content");
+		const showTime = extract(xml, "showTime");
+		const color = extract(xml, "color");
+		const font = extract(xml, "font");
+
+		for (let i = 0; i < danmaku.length; i++) {
+			// console.log(bulletInfo)
+			const content = JSON.parse(JSON.stringify(content_template));
+			content.timepoint = showTime[i];//showTime
+			content.color = parseInt(color[i], 16);//color
+			content.content = danmaku[i]; //content
+			content.size = font[i];//font
+			contents.push(content);
+		}
+		return contents;
+	};
+
+	this.parse = async (promises) => {
+		memory();
+		//筛选出成功的请求
+		let datas = (await Promise.allSettled(promises))
+			.filter(x => x.status === "fulfilled")
+			.map(x => x.value.data);
+		memory();
+		let contents = [];
+		for (let i = 0; i < datas.length; i++) {
+			const data = datas[i];
+			let xml = pako.inflate(data, { to: "string" });
+			this.xml2json(xml, contents);
+			data[i] = undefined;
+			xml = undefined;
 			global.gc();
-			for (const entry of json.danmu.data[0].entry??[]) {
-				for (const bulletInfo of entry.list[0].bulletInfo??[]){
-					// console.log(bulletInfo)
-					const content = JSON.parse(JSON.stringify(content_template));
-					content.timepoint = bulletInfo["showTime"][0];//showTime
-					content.color = parseInt(bulletInfo["color"][0], 16);//color
-					content.content = bulletInfo["content"][0]; //content
-					content.size = bulletInfo["font"][0];//font
-					contents.push(content);
-				}
-			}
 			memory();
 		}
+		datas = undefined;
 		contents = make_response(contents);
+		memory();
 		return contents;
 	};
 
@@ -99,7 +127,7 @@ module.exports = Iqiyi;
 if (!module.parent) {
 	const m = new Iqiyi();
 
-	m.work(m.example_urls[2]).then(() => {
+	m.work(m.example_urls[1]).then(() => {
 		// console.log(m.content);
 		console.log(m.title);
 		memory();
