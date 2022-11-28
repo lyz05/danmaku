@@ -1,5 +1,5 @@
 const axios = require("axios");
-const dnspod = require("./dnspod");
+const dnspod = require("../utils/dnspod");
 
 const KEY = "o1zrmHAF";
 const DOMAINS = {
