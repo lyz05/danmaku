@@ -6,12 +6,13 @@ const instance = axios.create({
 	baseURL: "https://dnsapi.cn"
 });
 
-async function get_record(domain, subdomain) {
+async function get_record(domain, subdomain, recordtype) {
 	const api = "/Record.List";
 	const data = querystring.stringify({
 		"domain": domain,
 		"sub_domain": subdomain,
 		"login_token": token,
+		"record_type": recordtype,
 		"format": "json"
 	});
 	const res = await instance.post(api, data);
@@ -32,7 +33,7 @@ async function update_record(domain, record) {
 		"format": "json",
 	});
 	const res = await instance.post(api, data);
-	return res.data;
+	return res.data.status;
 }
 
 async function add_record(domain, record) {
@@ -67,14 +68,8 @@ async function del_record(domain, record) {
 module.exports = {get_record, update_record, add_record, del_record};
 
 if (!module.parent) {
-	get_record("home999.cc", "gd").then(res => {
+	get_record("home999.cc", "n1","AAAA").then(res => {
 		console.log(res);
-		for (const record of res) {
-			if (record.line !== "默认") {
-				del_record("home999.cc", record).then(res => {
-					console.log(res);
-				});
-			}
-		}
 	});
 }
+
