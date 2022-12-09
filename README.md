@@ -25,3 +25,10 @@ flyctl deploy
 # 性能提升
 相比于旧版的Python项目，Node对于异步并发的处理能力更强。
 Express框架的性能也比Python的Django要好很多。
+
+# fly.io常用命令
+``` sh
+flyctl scale count 0
+flyctl regions add sea
+flyctl regions remove nrt
+```
