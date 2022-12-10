@@ -32,3 +32,9 @@ flyctl scale count 0
 flyctl regions add sea
 flyctl regions remove nrt
 ```
+
+# Node常用工具
+```bash
+npm outdated
+npm update
+```

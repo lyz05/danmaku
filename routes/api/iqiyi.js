@@ -64,8 +64,8 @@ function Iqiyi() {
 	function extract(xml, tag) {
 		const reg = new RegExp(`<${tag}>(.*?)</${tag}>`, "g");
 		const res = xml.match(reg)
-			.map(x => x.substring(tag.length + 2, x.length - tag.length - 3));
-		return res;
+			?.map(x => x.substring(tag.length + 2, x.length - tag.length - 3));
+		return res || [];
 	}
 
 	this.xml2json = (xml, contents) => {
@@ -127,9 +127,10 @@ module.exports = Iqiyi;
 if (!module.parent) {
 	const m = new Iqiyi();
 
-	m.work(m.example_urls[1]).then(() => {
-		// console.log(m.content);
-		console.log(m.title);
-		memory();
-	});
+	m.work(m.example_urls[1])
+		.then(() => {
+			// console.log(m.content);
+			console.log(m.title);
+			memory();
+		});
 }

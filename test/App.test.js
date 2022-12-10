@@ -89,7 +89,7 @@ describe("App", () => {
 		});
 	});
 	describe("机场订阅模块",function (){
-		this.timeout(1000*5);
+		this.timeout(1000*8);
 		it("接口不带参数测试",  (done) =>{
 			chai.request(app)
 				.get("/sub")

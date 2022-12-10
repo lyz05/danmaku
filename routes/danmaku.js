@@ -21,7 +21,9 @@ async function build_response(url, req) {
 	}
 	console.log("Real url:", url);
 	try {
-		await axios.get(url);
+		await axios.get(url,{
+			headers: { "Accept-Encoding": "gzip,deflate,compress" }
+		});
 	} catch (e) {
 		console.log(e);
 		return { msg: "传入的链接非法！请检查链接是否能在浏览器正常打开" };
