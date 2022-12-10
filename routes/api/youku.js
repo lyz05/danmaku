@@ -18,8 +18,12 @@ function Youku() {
 
 	this.get_tk_enc = async () => {
 		const api_url = "https://acs.youku.com/h5/mtop.com.youku.aplatform.weakget/1.0/?jsv=2.5.1&appKey=24679788";
-		const res = await axios.get(api_url);
-		const cookies = res.headers["set-cookie"];
+		let cookies = undefined;
+		// 服务端可能报错:"x-retcode": "FAIL_SYS_INTERNAL_FAULT"
+		while (cookies === undefined) {
+			const res = await axios.get(api_url);
+			cookies = res.headers["set-cookie"];
+		}
 		let targetCookie = {};
 		for (let cookieStr of cookies) {
 			targetCookie = Object.assign(targetCookie, cookie.parse(cookieStr));
