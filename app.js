@@ -56,7 +56,7 @@ schedule(app);
 if (!DEBUG) {
 	console.log("PRODUCTION MODE!该模式下TG机器人正常运行");
 	// 引入TG机器人
-	require("./tgbot/bot");
+	require("./tgbot/tgbot");
 } else
 	console.log("DEBUG MODE!该模式下将关闭TG机器人");
 
