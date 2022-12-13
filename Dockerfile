@@ -5,12 +5,11 @@ RUN apk add tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
     && apk del tzdata
 
-
 LABEL fly_launch_runtime="nodejs"
-COPY . /app
 WORKDIR /app
-
+COPY ./package.json /app
 RUN npm install --production && npm prune --production
+COPY . /app
 ENV NODE_ENV production
 
 CMD [ "npm", "run", "start" ]
