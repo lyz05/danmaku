@@ -71,15 +71,15 @@ async function main() {
     } else console.log('无余量');
 
     // 遍历每个接种站尚有余额之时段
-    for (const item of quotalist) {
-        const { location } = await getlocationbyidtype(item.idtype)
-        const { periodlist } = await GetLocationPeriodByIdtype(item.idtype)
-        if (periodlist.length != 0) {
-            const name = location[0].name_c;
-            const periodlisttext = periodlist.map(l => `${l.booktime}  餘額 : ${l.ava_quota}`)
-            bot.sendMessage(chatID, name + '\n' + periodlisttext.join('\n'));
-        }
-    }
+    // for (const item of quotalist) {
+    //     const { location } = await getlocationbyidtype(item.idtype)
+    //     const { periodlist } = await GetLocationPeriodByIdtype(item.idtype)
+    //     if (periodlist.length != 0) {
+    //         const name = location[0].name_c;
+    //         const periodlisttext = periodlist.map(l => `${l.booktime}  餘額 : ${l.ava_quota}`)
+    //         bot.sendMessage(chatID, name + '\n' + periodlisttext.join('\n'));
+    //     }
+    // }
 
 }
 
