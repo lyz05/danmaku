@@ -2,10 +2,17 @@ const axios = require('axios');
 const tgbot = require("../tgbot/tgbot.js");
 
 const rootPath = 'https://eservice.ssm.gov.mo/covidvacbook/'
-const chatID = 619935997;
+const chatID = [619935997, 5646988443];
 const IDTYPES = ["J", "f", "M", "h", "O", "n"]
 
 console.log('covidbook.js loaded')
+
+function sendMessage(msg) {
+    const bot = tgbot.hkaliyun;
+    chatID.forEach(id => {
+        bot.sendMessage(id, msg);
+    });
+}
 
 async function GetLocationQuotaList() {
     const url = rootPath + 'Booking/GetLocationQuotaList';
@@ -51,8 +58,6 @@ async function GetlocationList() {
 }
 
 async function main() {
-    const bot = tgbot.hkaliyun;
-
     const { ivlocationquotalist, mrnalocationquotalist } = await GetLocationQuotaList();
     const quotalist = mrnalocationquotalist;
 
@@ -63,7 +68,7 @@ async function main() {
         const { location } = await getlocationbyidtype(idtype)
         const name = location[0].name_c;
         if (bookdatelist.length != 0) {
-            bot.sendMessage(chatID, name + "\n" + bookdatelist.join('\n'));
+            sendMessage(name + "\n" + bookdatelist.join('\n'));
         }
     }
 
@@ -97,4 +102,5 @@ if (!module.parent) {
     // 引入环境变量
     require("dotenv").config('../.env');
     main()
+    sendMessage('测试')
 }
