@@ -56,6 +56,7 @@ async function main() {
     const { ivlocationquotalist, mrnalocationquotalist } = await GetLocationQuotaList();
     const quotalist = mrnalocationquotalist;
 
+    console.log('covidbook query')
     //筛选出可预约的日期
     for (const idtype of IDTYPES) {
         const { bookdatelist } = await GetBookDate(idtype);
@@ -65,16 +66,17 @@ async function main() {
             bot.sendMessage(chatID, name + "\n" + bookdatelist.join('\n'));
         }
     }
-    // 筛选出当日有余量的接种站
-    const quotalistfilter = quotalist.filter(x => x.sum != '0')
-    if (quotalistfilter.length != 0) {
-        console.log('有余量');
-        const time2 = new Date().toLocaleTimeString();
-        bot.sendMessage(chatID, `当前时间：${time2}，以下是有余量的接种站:`);
-        for (const l of quotalistfilter) {
-            bot.sendMessage(chatID, `${l.name_c} : ${l.sum}`);
-        }
-    } else console.log('无余量');
+
+    // // 筛选出当日有余量的接种站
+    // const quotalistfilter = quotalist.filter(x => x.sum != '0')
+    // if (quotalistfilter.length != 0) {
+    //     console.log('有余量');
+    //     const time2 = new Date().toLocaleTimeString();
+    //     bot.sendMessage(chatID, `当前时间：${time2}，以下是有余量的接种站:`);
+    //     for (const l of quotalistfilter) {
+    //         bot.sendMessage(chatID, `${l.name_c} : ${l.sum}`);
+    //     }
+    // } else console.log('无余量');
 
     // 遍历每个接种站尚有余额之时段
     // for (const item of quotalist) {

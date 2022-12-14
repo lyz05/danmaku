@@ -33,7 +33,7 @@ module.exports = (app) => {
 			});
 		});
 	});
-	cron.schedule("*/2 * * * *", () => {
+	cron.schedule("*/15 * * * * *", () => {
 		covidbook();
 	});
 };
