@@ -3,7 +3,7 @@ const tgbot = require("../tgbot/tgbot.js");
 
 const rootPath = 'https://eservice.ssm.gov.mo/covidvacbook/'
 const chatID = 619935997;
-const IDTYPES = ["J","f","M","h","O","n"]
+const IDTYPES = ["J", "f", "M", "h", "O", "n"]
 
 console.log('covidbook.js loaded')
 
@@ -33,7 +33,13 @@ async function getlocationbyidtype(idtype) {
 async function GetBookDate(idtype) {
     var url = rootPath + 'Booking/GetBookDate';
     var checkquota = false;
-    const time2 = new Date().toLocaleDateString().replace(/\//g, '');
+
+    let date = new Date()
+    let year = date.getFullYear()
+    let month = (date.getMonth() + 1).toString().padStart(2, '0')
+    let day = date.getDate().toString().padStart(2, '0')
+    var time2 = `${year}${month}${day}`
+
     var data = { idtype: idtype, afterdate: time2, checkquota: checkquota };
     const res = await axios.post(url, data);
     return { bookdatelist: res.data }
