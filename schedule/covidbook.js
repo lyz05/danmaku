@@ -3,7 +3,7 @@ const tgbot = require("../tgbot/tgbot.js");
 
 const rootPath = 'https://eservice.ssm.gov.mo/covidvacbook/'
 const chatID = 619935997;
-
+const IDTYPES = ["J","f","M","h","O","n"]
 
 console.log('covidbook.js loaded')
 
@@ -30,17 +30,40 @@ async function getlocationbyidtype(idtype) {
     return { location: res.data }
 }
 
+async function GetBookDate(idtype) {
+    var url = rootPath + 'Booking/GetBookDate';
+    var checkquota = false;
+    const time2 = new Date().toLocaleDateString().replace(/\//g, '');
+    var data = { idtype: idtype, afterdate: time2, checkquota: checkquota };
+    const res = await axios.post(url, data);
+    return { bookdatelist: res.data }
+}
+
+async function GetlocationList() {
+    var url = rootPath + 'Booking/GetlocationList';
+    const res = await axios.post(url, {});
+}
+
 async function main() {
     const bot = tgbot.hkaliyun;
 
     const { ivlocationquotalist, mrnalocationquotalist } = await GetLocationQuotaList();
     const quotalist = mrnalocationquotalist;
 
-    // 筛选出有余量的接种站
+    //筛选出可预约的日期
+    for (const idtype of IDTYPES) {
+        const { bookdatelist } = await GetBookDate(idtype);
+        const { location } = await getlocationbyidtype(idtype)
+        const name = location[0].name_c;
+        if (bookdatelist.length != 0) {
+            bot.sendMessage(chatID, name + "\n" + bookdatelist.join('\n'));
+        }
+    }
+    // 筛选出当日有余量的接种站
     const quotalistfilter = quotalist.filter(x => x.sum != '0')
     if (quotalistfilter.length != 0) {
         console.log('有余量');
-        const time2 = new Date().toLocaleTimeString(); 
+        const time2 = new Date().toLocaleTimeString();
         bot.sendMessage(chatID, `当前时间：${time2}，以下是有余量的接种站:`);
         for (const l of quotalistfilter) {
             bot.sendMessage(chatID, `${l.name_c} : ${l.sum}`);
@@ -54,7 +77,7 @@ async function main() {
         if (periodlist.length != 0) {
             const name = location[0].name_c;
             const periodlisttext = periodlist.map(l => `${l.booktime}  餘額 : ${l.ava_quota}`)
-            bot.sendMessage(chatID, name+'\n'+periodlisttext.join('\n'));
+            bot.sendMessage(chatID, name + '\n' + periodlisttext.join('\n'));
         }
     }
 
