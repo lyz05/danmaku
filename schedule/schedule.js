@@ -3,7 +3,6 @@ const leancloud = require("../utils/leancloud");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const cf2dns = require("./cf2dns");
-const covidbook = require("./covidbook");
 
 function subcache(app) {
 	console.log("Running Cron Job：subcache");
@@ -33,11 +32,5 @@ module.exports = (app) => {
 			});
 		});
 	});
-	cron.schedule("*/30 * * * * *", () => {
-		covidbook();
-	});
 };
 
-if (!module.parent) {
-	covidbook();
-}
