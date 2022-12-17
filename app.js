@@ -3,15 +3,17 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const rateLimit = require("express-rate-limit");
 
 // 引入环境变量
-require("dotenv").config();
+require("dotenv")
+	.config();
 
 // 引入一个个路由模块
 const danmakuRouter = require("./routes/danmaku");
 const ipinfoRouter = require("./routes/ipinfo");
 const airportsubRouter = require("./routes/airportsub");
-const DEBUG = process.env.DEBUG==="true" || false;
+const DEBUG = process.env.DEBUG === "true" || false;
 
 const app = express();
 
@@ -22,14 +24,26 @@ app.set("trust proxy", true);
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// 加载静态资源
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/assets", [
 	express.static(__dirname + "/node_modules/jquery/dist/"),
 	express.static(__dirname + "/node_modules/bootstrap/dist/"),
 ]);
 
+// Rate Limit
+const apiLimiter = rateLimit({
+	windowMs: 60 * 1000, // 1 minute
+	max: 6, // limit each IP to 6 requests per windowMs
+	message: "Too many requests from this IP, please try again after an minute",
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	skipFailedRequests: true, // Don't count failed requests (status >= 400)
+});
+app.use(apiLimiter);
+
+// 加载路由
 app.use("/", danmakuRouter);
 app.use("/ipinfo", ipinfoRouter);
 app.use("/sub", airportsubRouter);
@@ -57,7 +71,8 @@ if (!DEBUG) {
 	console.log("PRODUCTION MODE!该模式下TG机器人正常运行");
 	// 引入TG机器人
 	require("./tgbot/tgbot");
-} else
+} else {
 	console.log("DEBUG MODE!该模式下将关闭TG机器人");
+}
 
 module.exports = app;
