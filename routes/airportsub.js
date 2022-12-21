@@ -109,13 +109,16 @@ router.get("/cache", async function (req, res) {
 			const key = Object.keys(database.suburl)[i];
 			messages.push({title: "Download", key, status: res.status});
 			const userinfo = res.headers["subscription-userinfo"];
-			const base64userinfo = Buffer.from(userinfo).toString("base64");
+			console.log(userinfo)
 			// 设置强制下载并设置文件名
 			const headers = {
 				"Content-type": "text/plain; charset=utf-8",
 				"content-disposition": `attachment; filename=${key}`,
-				"x-oss-persistent-headers": "Subscription-Userinfo:" + base64userinfo
 			};
+			if (userinfo) {
+				const base64userinfo = Buffer.from(userinfo).toString("base64");
+				headers["x-oss-persistent-headers"] = "Subscription-Userinfo:" + base64userinfo;
+			}
 			promises.push(oss.put("SUB/" + key, res.data, headers));
 		}
 		Promise.all(promises).then(values => {
