@@ -100,7 +100,9 @@ function Iqiyi() {
 			this.xml2json(xml, contents);
 			data[i] = undefined;
 			xml = undefined;
-			global.gc();
+			if (global.gc) {
+				global.gc();
+			}
 			memory();
 		}
 		datas = undefined;

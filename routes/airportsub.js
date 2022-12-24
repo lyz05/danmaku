@@ -58,6 +58,7 @@ router.get("/", async function (req, res) {
 					//返回指定订阅信息
 					if (subinfo) {
 						const ua = req.headers["user-agent"];
+						// 判断是否要生成加速链接
 						if (ua.indexOf("Mozilla") === -1) {
 							const url = await oss.signurl("SUB/" + req.query.ctype, true);
 							res.redirect(url);
@@ -150,7 +151,7 @@ router.get("/download", async function (req, res) {
 			for (const asset of datas[i].assets) {
 				asset.size = filesize(asset.size, {base: 2, standard: "jedec"});
 				asset["fastgit_url"] = asset["browser_download_url"].replace("github.com", "download.fastgit.org");
-				asset["ghproxy_url"] = "https://mirror.ghproxy.com?q=" + asset["browser_download_url"];
+				asset["ghproxy_url"] = "https://ghproxy.com/" + asset["browser_download_url"];
 			}
 		}
 		res.render("airportdownload", {datas});

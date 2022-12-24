@@ -15,7 +15,8 @@
 
 # 部署到fly.io
 ``` sh
-curl -L https://fly.io/install.sh | sh
+curl -L https://fly.io/install.sh | sh #linux
+iwr https://fly.io/install.ps1 -useb | iex #windows
 export FLYCTL_INSTALL="/home/codespace/.fly"
 export PATH="$FLYCTL_INSTALL/bin:$PATH"
 flyctl auth login
