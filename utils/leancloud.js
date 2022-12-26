@@ -42,7 +42,7 @@ async function danmakuQuery(date) {
 
 function add(className,obj) {
   if (obj.ip || obj.remoteIP)
-    obj.ipCountry = getipCountry(obj.ip | obj.remoteIP);
+    obj.ipCountry = getipCountry(obj.ip || obj.remoteIP);
 	const classInstance = AV.Object.extend(className);
 	const record = new classInstance();
 	for (const key of Object.keys(obj)){
