@@ -70,7 +70,7 @@ describe("App", () => {
 				done();
 			});
 	});
-	describe("ipinfo modules", () => {
+	describe("ipinfo模块", () => {
 		it("GET the ipinfo response", (done) => {
 			chai.request(app)
 				.get("/ipinfo")
@@ -84,6 +84,14 @@ describe("App", () => {
 				.get("/ipinfo?name=home999.cc")
 				.end((err, res) => {
 					res.should.have.status(200);
+					done();
+				});
+		});
+		it("GET the ddns", (done) => {
+			chai.request(app)
+				.get("/ipinfo/ddns")
+				.end((err, res) => {
+					res.text.should.have.string("subdomain");
 					done();
 				});
 		});

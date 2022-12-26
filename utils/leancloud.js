@@ -1,4 +1,6 @@
 const AV = require("leancloud-storage");
+const libqqwry = require("lib-qqwry");
+const qqwry = libqqwry();
 // 引入环境变量
 require("dotenv").config({path: "../.env"});
 
@@ -39,6 +41,8 @@ async function danmakuQuery(date) {
 }
 
 function add(className,obj) {
+  if (obj.ip || obj.remoteIP)
+    obj.ipCountry = getipCountry(obj.ip | obj.remoteIP);
 	const classInstance = AV.Object.extend(className);
 	const record = new classInstance();
 	for (const key of Object.keys(obj)){
@@ -50,9 +54,16 @@ function add(className,obj) {
 	});
 }
 
+function getipCountry(ip) {
+  try {
+    const info = qqwry.searchIP(ip);
+    return info.Country+" "+info.Area;
+  } catch (e) {
+    return null;
+  }
+}
+
 module.exports = {danmakuQuery, currentDay, currentMonth, lastDay, add};
 
-//TODO IP地理信息查询并记录到日志中
 if (!module.parent) {
-
 }
