@@ -93,6 +93,9 @@ router.get("/cache", async function (req, res) {
 	for (let key in database.suburl) {
 		const url = database.suburl[key].url;
 		const params = database.suburl[key].params;
+		if (params && params.url) {
+			params.url = [params.url].flat().join("|");
+		}
 		if (!url) continue;
 		promises.push(axios.get(url, {params}));
 	}
