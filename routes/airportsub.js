@@ -57,8 +57,14 @@ router.get("/", async function (req, res) {
 					const subinfo = database.suburl[req.query.ctype];
 					//返回指定订阅信息
 					if (subinfo) {
-            const url = await oss.signurl("SUB/" + req.query.ctype, true);
-            res.redirect(url);
+						// 判断是否要生成加速链接，是否为订阅转换
+						if (!req.headers['subconverter-request']) {
+							const url = await oss.signurl("SUB/" + req.query.ctype, true);
+							res.redirect(url);
+						} else {
+							const ret = await oss.get("SUB/" + req.query.ctype);
+							res.type("text/plain").end(ret);
+						}
 					} else {
 						res.status(404).send("Not Found 找不到这种订阅类型");
 					}
