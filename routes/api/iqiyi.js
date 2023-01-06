@@ -68,13 +68,16 @@ function Iqiyi() {
 		return res || [];
 	}
 
-	this.xml2json = (xml, contents) => {
+	this.xml2json = (xml, contents,length) => {
 		const danmaku = extract(xml, "content");
 		const showTime = extract(xml, "showTime");
 		const color = extract(xml, "color");
 		const font = extract(xml, "font");
 
-		for (let i = 0; i < danmaku.length; i++) {
+    // 控制步长，减小内存占用
+    const step = Math.floor(danmaku.length*length/10000);
+    // console.log(step)
+		for (let i = 0; i < danmaku.length; i+=step) {
 			// console.log(bulletInfo)
 			const content = JSON.parse(JSON.stringify(content_template));
 			content.timepoint = showTime[i];//showTime
@@ -83,7 +86,6 @@ function Iqiyi() {
 			content.size = font[i];//font
 			contents.push(content);
 		}
-		return contents;
 	};
 
 	this.parse = async (promises) => {
@@ -97,7 +99,7 @@ function Iqiyi() {
 		for (let i = 0; i < datas.length; i++) {
 			const data = datas[i];
 			let xml = pako.inflate(data, { to: "string" });
-			this.xml2json(xml, contents);
+			this.xml2json(xml, contents,datas.length);
 			data[i] = undefined;
 			xml = undefined;
 			if (global.gc) {
