@@ -75,7 +75,7 @@ function Iqiyi() {
 		const font = extract(xml, "font");
 
     // 控制步长，减小内存占用
-    const step = Math.floor(danmaku.length*length/10000);
+    const step = Math.ceil(danmaku.length*length/10000);
     // console.log(step)
 		for (let i = 0; i < danmaku.length; i+=step) {
 			// console.log(bulletInfo)
