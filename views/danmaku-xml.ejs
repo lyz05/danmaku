@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i>
+    <% for (const content of contents) { %>
+        <d p="<%= content.timepoint %>,<%= content.ct %>,<%= content.size %>,<%= content.color %>,<%= content.unixtime %>,<%= content.uid %>,26732601000067074">
+            <%=content.content%>
+        </d>
+    <% } %>
+</i>

@@ -108,7 +108,7 @@ function Iqiyi() {
 			memory();
 		}
 		datas = undefined;
-		contents = make_response(contents);
+		// contents = make_response(contents);
 		memory();
 		return contents;
 	};

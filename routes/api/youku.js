@@ -2,10 +2,7 @@ const urlmodule = require('url');
 const axios = require('axios');
 const cookie = require('cookie');
 const crypto = require('crypto');
-const {
-  make_response,
-  content_template
-} = require('./utils');
+const { content_template } = require('./utils');
 
 function Youku() {
   this.name = '优酷';
@@ -153,7 +150,7 @@ function Youku() {
         contents.push(content);
       }
     }
-    contents = make_response(contents);
+    // contents = make_response(contents);
     return contents;
   };
 
@@ -173,9 +170,9 @@ module.exports = Youku;
 
 if (!module.parent) {
   const b = new Youku();
-  b.work(b.example_urls[0])
+  b.work(b.example_urls[2])
     .then(() => {
-      console.log(b.content);
+      // console.log(b.content);
       console.log(b.title);
     });
 }

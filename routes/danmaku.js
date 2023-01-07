@@ -75,15 +75,18 @@ router.get("/", async function (req, res) {
 		const ret = await build_response(url, req);
 		memory(); //显示内存使用量
 		if (ret.msg !== "ok") {
-			res.status(403)
-				.send(ret.msg);
+			res.status(403).send(ret.msg);
+			return;
 		} else if (download) {
 			res.attachment(ret.title + ".xml");
-			res.end(ret.content);
 		} else {
 			res.type("application/xml");
-			res.end(ret.content);
 		}
+		//B站视频，直接重定向
+		if (ret.url)
+			res.redirect(ret.url);
+		else
+			res.render("danmaku-xml",{contents: ret.content});
 	}
 });
 

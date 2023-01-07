@@ -1,7 +1,7 @@
 const urlmodule = require("url");
 const axios = require("axios");
 const whacko = require("whacko");
-const {make_response, content_template} = require("./utils");
+const {content_template} = require("./utils");
 
 function Tencentvideo() {
 	this.name = "腾讯视频";
@@ -61,7 +61,7 @@ function Tencentvideo() {
 				contents.push(content);
 			}
 		}
-		contents = make_response(contents);
+		// contents = make_response(contents);
 		return contents;
 	};
 

@@ -1,6 +1,6 @@
 const urlmodule = require("url");
 const axios = require("axios");
-const {time_to_second, make_response, content_template} = require("./utils");
+const {time_to_second, content_template} = require("./utils");
 
 function Mgtv() {
 	this.name = "芒果TV";
@@ -45,7 +45,7 @@ function Mgtv() {
 				contents.push(content);
 			}
 		}
-		contents = make_response(contents);
+		// contents = make_response(contents);
 		return contents;
 	};
 

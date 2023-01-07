@@ -1,7 +1,5 @@
 const urlmodule = require("url");
 const axios = require("axios");
-const got = require("got");
-const {inflateRawSync} = require("zlib");
 
 function Bilibili() {
 	this.name = "B站";
@@ -62,29 +60,17 @@ function Bilibili() {
 
 	};
 
-	this.parse = async (urls) => {
-		// B站使用特殊的压缩方法，需要使用got模块
-		const bufferData = await got(urls[0], {
-			decompress: false
-		}).buffer();
-		const content = inflateRawSync(bufferData).toString();
-		return content;
-	};
-
 	this.work = async (url) => {
 		const urls = await this.resolve(url);
 		if (!this.error_msg) {
-			console.log(this.name,"api lens:",urls.length);
-			this.content = await this.parse(urls);
+			this.url = urls[0];
 		}
 		return {
 			title: this.title,
-			content: this.content,
+			url: this.url,
 			msg: this.error_msg? this.error_msg: "ok"
 		};
 	};
-
-
 }
 
 module.exports = Bilibili;
