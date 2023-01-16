@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const rateLimit = require('express-rate-limit');
 
 // 引入环境变量
 require('dotenv')
@@ -33,18 +32,6 @@ app.use('/assets', [
   express.static(__dirname + '/node_modules/jquery/dist/'),
   express.static(__dirname + '/node_modules/bootstrap/dist/'),
 ]);
-
-// Rate Limit
-const allowlist = ['::1', '::ffff:127.0.0.1'];
-const apiLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 6, // limit each IP to 6 requests per windowMs
-  message: 'Too many requests from this IP, please try again after an minute',
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  skipFailedRequests: true, // Don't count failed requests (status >= 400)
-  skip: (request, response) => allowlist.includes(request.ip),
-});
-app.use(apiLimiter);
 
 // 加载路由
 app.use('/', danmakuRouter);
