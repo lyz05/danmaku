@@ -12,6 +12,7 @@ require('dotenv')
 const danmakuRouter = require('./routes/danmaku');
 const ipinfoRouter = require('./routes/ipinfo');
 const airportsubRouter = require('./routes/airportsub');
+const imgRouter = require('./routes/img');
 const schedule = require('./schedule/schedule');
 const DEBUG = process.env.DEBUG === 'true' || false;
 
@@ -32,11 +33,13 @@ app.use('/assets', [
   express.static(__dirname + '/node_modules/jquery/dist/'),
   express.static(__dirname + '/node_modules/bootstrap/dist/'),
 ]);
+app.use('/upload', express.static(__dirname + '/upload'));
 
 // 加载路由
 app.use('/', danmakuRouter);
 app.use('/ipinfo', ipinfoRouter);
 app.use('/sub', airportsubRouter);
+app.use('/img', imgRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

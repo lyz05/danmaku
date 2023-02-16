@@ -1,0 +1,12 @@
+<% var title="图片上传"%>
+<%- include('utils/header', {title}); %>
+<body>
+<div class="container">
+    <form action="/img/upload" method="post" enctype="multipart/form-data">
+        <h2>单图上传</h2>
+        <input type="file" name="file" accept=".jpg, .jpeg, .png, .hdr">
+        <input type="submit" value="提交">
+    </form>
+</div>
+</body>
+</html>
