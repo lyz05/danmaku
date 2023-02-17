@@ -38,7 +38,8 @@ router.post('/upload', upload.single('file'), function (req, res, next) {
       res.json({
         status: '100',
         msg: '上传成功',
-        key: key
+        key: key,
+        imgName: originalName
       });
     }
   });
