@@ -32,6 +32,8 @@ Express框架的性能也比Python的Django要好很多。
 flyctl scale count 0
 flyctl regions add sea
 flyctl regions remove nrt
+flyctl config env
+flyctl secrets set DEBUG=true
 ```
 
 # Node常用工具

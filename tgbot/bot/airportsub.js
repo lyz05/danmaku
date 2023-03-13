@@ -4,7 +4,8 @@ const yaml = require("js-yaml");
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
 const oss = require("../../utils/oss");
-const goindex = require("./goindex");
+const goindex = require("../api/goindex");
+const openai = require("../api/openai");
 
 async function finduserbychatid(chatid) {
 	const database = await oss.get("SUB/database.yaml");
@@ -32,6 +33,7 @@ async function setchatidbyuser(user, chatid) {
 
 module.exports = (TOKEN) => {
 	const game = {};
+	let openai_messages = {};
 	let setu = {};
 	const bot = new TelegramBot(TOKEN, { polling: true });
 
@@ -61,16 +63,33 @@ module.exports = (TOKEN) => {
 		}
 	});
 
-	// 智能聊天机器人
-	bot.on("text", (msg) => {
+	// // 智能聊天机器人
+	// bot.on("text", (msg) => {
+	// 	if (msg.text.indexOf("/") === -1) {
+	// 		bot.sendMessage(msg.chat.id, `you said: ${msg.text}`);
+	// 		axios.get(`https://api.qingyunke.com/api.php?key=free&appid=0&msg=${encodeURI(msg.text)}`)
+	// 			.then((res) => {
+	// 				console.log(res.data);
+	// 				bot.sendMessage(msg.chat.id, res.data.content);
+	// 			});
+	// 	}
+	// });
+
+	// ChatGPT版智能聊天机器人
+	bot.on("text", async (msg) => {
 		if (msg.text.indexOf("/") === -1) {
 			bot.sendMessage(msg.chat.id, `you said: ${msg.text}`);
-			axios.get(`https://api.qingyunke.com/api.php?key=free&appid=0&msg=${encodeURI(msg.text)}`)
-				.then((res) => {
-					console.log(res.data);
-					bot.sendMessage(msg.chat.id, res.data.content);
-				});
+			let messages = openai_messages[msg.chat.id] || [], res;
+			[res, messages] = await openai.chat(msg.text, messages);
+			const length = (messages.length - 1) / 2;
+			bot.sendMessage(msg.chat.id, `${res}\n\nPowered by OpenAI 连续对话了${length}次`);
+			openai_messages[msg.chat.id] = messages;
 		}
+	});
+
+	bot.onText(/\/clear/, (msg) => {
+		openai_messages[msg.chat.id] = [];
+		bot.sendMessage(msg.chat.id, "已清空对话记录");
 	});
 
 	// 欢迎页面

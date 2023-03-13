@@ -33,6 +33,7 @@
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.2",
     "node-telegram-bot-api": "^0.60.0",
+    "openai": "^3.2.1",
     "pako": "^1.0.11",
     "querystring": "^0.2.1",
     "whacko": "^0.19.1",
