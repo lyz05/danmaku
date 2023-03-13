@@ -92,6 +92,13 @@ module.exports = (TOKEN) => {
 		bot.sendMessage(msg.chat.id, "已清空对话记录");
 	});
 
+	bot.onText(/\/prompt/, async (msg) => {
+		const prompt = msg.text.replace("/prompt ", "").replace("/prompt", "");
+		openai_messages[msg.chat.id] = [];
+		const res = await openai.setprompt(prompt);
+		bot.sendMessage(msg.chat.id, `已设置对话提示为:${res}`);
+	});
+
 	// 欢迎页面
 	bot.onText(/\/start/, (msg) => {
 		let name = [msg.from.first_name];
@@ -211,6 +218,14 @@ module.exports = (TOKEN) => {
 				command: "help",
 				description: "帮助"
 			},
+			{
+				command: "clear",
+				description: "清空OpenAI聊天记录"
+			},
+			{
+				command: "prompt",
+				description: "设置OpenAI聊天提示句"
+			}
 		];
 		const helpMsgText = helpMsg.map((item) => `/${item.command} - ${item.description}`)
 			.join("\n");

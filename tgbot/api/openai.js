@@ -5,6 +5,11 @@ const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
+let prompt = { "role": "system", "content": "You are a helpful assistant." }
+async function setprompt(content) {
+    prompt = { "role": "system", "content": content || "You are a helpful assistant." }
+    return prompt.content
+}
 
 async function completions(prompt) {
     const completion = await openai.createCompletion({
@@ -15,7 +20,6 @@ async function completions(prompt) {
 }
 
 async function chat(content, messages) {
-    const prompt = { "role": "system", "content": "You are a helpful assistant." }
     if (!messages || messages.length == 0) {
         messages = [prompt]
     }
@@ -25,7 +29,7 @@ async function chat(content, messages) {
         "messages": messages,
     });
     messages.push(completion.data.choices[0].message);
-    // console.log(messages)
+    console.log(messages)
     return [completion.data.choices[0].message.content, messages];
 }
 
@@ -41,4 +45,5 @@ async function main() {
 module.exports = {
     completions,
     chat,
+    setprompt,
 }
