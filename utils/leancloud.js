@@ -5,8 +5,8 @@ const qqwry = libqqwry();
 require("dotenv").config({path: "../.env"});
 
 AV.init({
-	appId: process.env.LEANCLOUD_APP_ID,
-	appKey: process.env.LEANCLOUD_APP_KEY,
+	appId: process.env.LEANCLOUD_DANMAKU_APP_ID,
+	appKey: process.env.LEANCLOUD_DANMAKU_APP_KEY,
 	serverURL: "https://dbvunek8.lc-cn-e1-shared.com"
 });
 

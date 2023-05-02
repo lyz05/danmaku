@@ -8,9 +8,9 @@ require("dotenv")
 	.config({ path: "../.env" });
 
 let client = new OSS({
-	region: process.env.OSS_REGION,
-	accessKeyId: process.env.OSS_ACCESS_KEY,
-	accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
+	region: process.env.ALI_OSS_REGION,
+	accessKeyId: process.env.ALI_ACCESS_KEY,
+	accessKeySecret: process.env.ALI_ACCESS_KEY_SECRET,
 	bucket: process.env.OSS_BUCKET,
 });
 
