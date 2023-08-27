@@ -31,7 +31,7 @@ router.get("/", function (req, res) {
 });
 
 router.get("/ddns", async function (req, res) {
-	let ip = req.ip,
+  let ip = req.query.ip ? req.query.ip : req.ip,
 		subdomain = req.query.subdomain;
 	if (ip.substr(0, 7) === "::ffff:") {
 		ip = ip.substr(7);
