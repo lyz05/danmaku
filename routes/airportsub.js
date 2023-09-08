@@ -21,7 +21,7 @@ function getuserinfo(headers) {
 	dic["use_percent"] = (100.0 * dic.total_use / dic.total).toFixed(2);
 	const now_time = Math.floor(Date.now() / 1000);
 	const end_time = dic.expire;
-	dic["date_percent"] = (100.0 * (now_time - end_time + 3600 * 24 * 365.0) / (3600 * 24 * 365.0)).toFixed(2);
+	dic["date_percent"] = (100.0 * (1-(end_time - now_time) / (3600 * 24 * 30.0))).toFixed(2);
 
 	dic["total_use"] = filesize(dic["total_use"], {base: 2, standard: "jedec"});
 	dic.total = filesize(dic.total, {base: 2, standard: "jedec"});
@@ -99,11 +99,15 @@ router.get("/cache", async function (req, res) {
 	for (let key in database.suburl) {
 		const url = database.suburl[key].url;
 		const params = database.suburl[key].params;
+		let headers = database.suburl[key].headers;	
 		if (params && params.url) {
 			params.url = [params.url].flat().join("|");
 		}
 		if (!url) continue;
-		promises.push(axios.get(url, {params}));
+		// 修复 Z_BUF_ERROR 的错误
+		if (headers)
+			headers["Accept-Encoding"] = "gzip,deflate,compress";
+		promises.push(axios.get(url, {params,headers}));
 	}
 	Promise.all(promises).then(values => {
 		promises = [];
