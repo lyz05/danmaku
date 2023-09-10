@@ -18,12 +18,10 @@ function Iqiyi() {
 
 	this.resolve = async (url) => {
 		const res = await axios({
+			url: url,
 			method: "get",
-			url: "https://proxy-fc-python-fdssfsqzaa.cn-shenzhen.fcapp.run/",
-			params: { url },
-			auth: {
-				username: "proxy",
-				password: "proxy"
+			headers: {
+				"Accept-Encoding": "gzip,deflate,compress"
 			}
 		});
 		const data = res.data;
