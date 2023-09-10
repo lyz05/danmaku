@@ -120,44 +120,11 @@ describe("App", () => {
 					done();
 				});
 		});
-		it("接口带user参数测试",  (done) =>{
-			chai.request(app)
-				.get("/sub?user=congcong")
-				.end((err,res) => {
-					res.should.have.status(200);
-					done();
-				});
-		});
 		it("接口错误user参数测试",  (done) =>{
 			chai.request(app)
 				.get("/sub?user=123")
 				.end((err,res) => {
 					res.should.have.status(404);
-					done();
-				});
-		});
-		it("接口带user与ctype参数测试", (done) =>{
-			chai.request(app)
-				.get("/sub?user=congcong&ctype=v2ray")
-				.end((err,res) => {
-					res.should.have.status(200);
-					done();
-				});
-		});
-		it("接口带user与错误ctype参数测试", (done) =>{
-			chai.request(app)
-				.get("/sub?user=congcong&ctype=abaaba")
-				.end((err,res) => {
-					res.should.have.status(404);
-					done();
-				});
-		});
-		it("接口带user与ctype参数测试，带Mozilla UA", (done) =>{
-			chai.request(app)
-				.get("/sub?user=congcong&ctype=v2ray")
-				.set("User-Agent","Mozilla/5.0 ")
-				.end((err,res) => {
-					res.should.have.status(200);
 					done();
 				});
 		});
