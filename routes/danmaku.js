@@ -18,7 +18,7 @@ const rateLimit = require('express-rate-limit');
 const allowlist = ['::1', '::ffff:127.0.0.1'];
 const apiLimiter = rateLimit({
 	windowMs: 5 * 60 * 1000, // 5 minute
-	max: 5, // limit each IP to 5 requests per windowMs
+	max: 10, // limit each IP to 10 requests per windowMs
 	message: 'Too many requests from this IP, please try again later',
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	skipFailedRequests: true, // Don't count failed requests (status >= 400)
