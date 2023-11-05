@@ -34,6 +34,7 @@ flyctl regions add sea
 flyctl regions remove nrt
 flyctl config env
 flyctl secrets set DEBUG=true
+flyctl ssh console
 ```
 
 # Node常用工具

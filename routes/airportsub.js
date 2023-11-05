@@ -140,10 +140,9 @@ router.get("/cache", async function (req, res) {
 });
 
 router.get("/download", async function (req, res) {
-	const repos = ["Dreamacro/clash", "Fndroid/clash_for_windows_pkg", "Kr328/ClashForAndroid",
+	const repos = [
 		"shadowsocks/shadowsocks-android", "XTLS/Xray-core", "2dust/v2rayN", "NetchX/Netch", "2dust/v2rayNG",
-		"yichengchen/clashX", "shadowsocks/shadowsocks-windows",
-		"shadowsocksrr/shadowsocksr-csharp", "FelisCatus/SwitchyOmega"];
+		"shadowsocks/shadowsocks-windows", "shadowsocksrr/shadowsocksr-csharp", "FelisCatus/SwitchyOmega"];
 	const auth = {
 		"username": process.env.GITHUB_USERNAME,
 		"password": process.env.GITHUB_TOKEN
