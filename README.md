@@ -13,6 +13,13 @@
 - express: web框架
 - lib-qqwry: 纯真IP数据库
 
+# 运行此项目
+``` sh
+pnpm install
+pnpm run dev
+pnpm run test # 单元测试
+```
+
 # 部署到fly.io
 ``` sh
 curl -L https://fly.io/install.sh | sh #linux
