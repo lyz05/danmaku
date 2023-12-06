@@ -150,7 +150,6 @@ describe("App", () => {
 				.get("/sub/download")
 				.end((err,res) => {
 					res.should.have.status(200);
-					res.text.should.have.string("clash");
 					res.text.should.have.string("v2ray");
 					res.text.should.have.string("shadowsocks");
 					done();

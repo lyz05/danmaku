@@ -8,6 +8,7 @@ const moment = require("moment");
 const axios = require("axios");
 const leancloud = require("../utils/leancloud");
 
+
 // TODO 迁移到leancloud
 function getuserinfo(headers) {
 	if (!headers)
@@ -30,7 +31,7 @@ function getuserinfo(headers) {
 }
 
 async function updateDatabase() {
-	const database = await oss.get("SUB/database.yaml");
+	const database = await oss.get("SUB/database.yaml",true);
 	try {
 		return yaml.load(database);
 	} catch (e) {
@@ -38,9 +39,12 @@ async function updateDatabase() {
 	}
 }
 
+// 缓存数据库
+let database;
+updateDatabase().then(ret => database = ret);
+
 /* GET users listing. */
 router.get("/", async function (req, res) {
-	const database = await updateDatabase();
 	leancloud.add("SubAccess", {
 		ip: req.ip,
 		ua: req.headers["user-agent"],
@@ -69,14 +73,19 @@ router.get("/", async function (req, res) {
 						res.status(404).send("Not Found 找不到这种订阅类型");
 					}
 				} else {
+					// 更新数据库
+					database = await updateDatabase();
+					// 缓存所有的协程
+					let promises = [];
 					const path = req.protocol + "://" + req.headers.host + req.originalUrl;
 					const tgproxys = database.telegram;
 					const ctypes = Object.keys(database.suburl);
 					let ret = {};
-					for (const key of ctypes) {
-						const headers = await oss.head("SUB/" + key);
-						ret[key] = getuserinfo(headers);
-						// ret[key] = getuserinfotxt(getuserinfo(headers))
+					for (const key of ctypes)
+						promises.push(oss.head("SUB/" + key,true));
+					const headers = await Promise.all(promises)
+					for (const i in ctypes) {
+						ret[ctypes[i]] = getuserinfo(headers[i]);
 					}
 					res.render("airportsub", {ret, path, tgproxys, expire: userinfo.expire});
 				}
@@ -92,7 +101,7 @@ router.get("/", async function (req, res) {
 });
 
 router.get("/cache", async function (req, res) {
-	const database = await updateDatabase();
+	database = await updateDatabase();
 	let messages = [];
 	// 缓存所有的协程
 	let promises = [];
