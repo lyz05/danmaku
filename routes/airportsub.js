@@ -105,9 +105,8 @@ router.get("/", async function (req, res) {
 
 router.get("/cache", async function (req, res) {
 	database = await updateDatabase();
-	let messages = [];
-	// 缓存所有的协程
 	let promises = [];
+	let messages = [];
 	for (let key in database.suburl) {
 		const url = database.suburl[key].url;
 		const params = database.suburl[key].params;
@@ -116,38 +115,32 @@ router.get("/cache", async function (req, res) {
 			params.url = [params.url].flat().join("|");
 		}
 		if (!url) continue;
-		// 修复 Z_BUF_ERROR 的错误
-		if (headers)
-			headers["Accept-Encoding"] = "gzip,deflate,compress";
-		promises.push(axios.get(url, {params,headers}));
+		// 设置强制下载并设置文件名
+		const Objheaders = {
+			"Content-type": "text/plain; charset=utf-8",
+			"content-disposition": `attachment; filename=${key}`,
+		};
+		// axios Post json
+		promises.push(axios.post("https://sub.home999.cc/OSS/Upload",     {
+			"token":{
+				"AccessKey": process.env.ALI_ACCESS_KEY,
+				"Secret": process.env.ALI_ACCESS_KEY_SECRET
+			},
+			"get": { url, headers, params },
+			"Object": {
+				"key": "SUB/"+key,
+				"headers": Objheaders
+			}
+		}));
 	}
 	Promise.all(promises).then(values => {
 		promises = [];
 		for (let i = 0; i < values.length; i++) {
 			const res = values[i];
 			const key = Object.keys(database.suburl)[i];
-			messages.push({title: "Download", key, status: res.status});
-			const userinfo = res.headers["subscription-userinfo"];
-			console.log(userinfo)
-			// 设置强制下载并设置文件名
-			const headers = {
-				"Content-type": "text/plain; charset=utf-8",
-				"content-disposition": `attachment; filename=${key}`,
-			};
-			if (userinfo) {
-				const base64userinfo = Buffer.from(userinfo).toString("base64");
-				headers["x-oss-persistent-headers"] = "Subscription-Userinfo:" + base64userinfo;
-			}
-			promises.push(oss.put("SUB/" + key, res.data, headers));
+			messages.push({key, message: res.data});
 		}
-		Promise.all(promises).then(values => {
-			for (let i = 0; i < values.length; i++) {
-				const res = values[i];
-				const key = Object.keys(database.suburl)[i];
-				messages.push({title: "Upload", key, status: res.res.status});
-			}
-			res.json(messages);
-		});
+		res.json(messages);
 	});
 });
 
