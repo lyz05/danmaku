@@ -22,9 +22,9 @@ module.exports = (app) => {
 	//TODO 添加自动删除一个月前的日志
 	console.log("schedule.js loaded");
 	// 自动刷新订阅
-	cron.schedule("0 */8 * * *", () => {
-		subcache(app);
-	});
+	// cron.schedule("0 */8 * * *", () => {
+	// 	subcache(app);
+	// });
 	// Cloudflare优选IP
 	// cron.schedule("*/15 * * * *", () => {
 	// 	cf2dns().then((result)=>{

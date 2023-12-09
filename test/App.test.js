@@ -8,7 +8,6 @@ chai.use(chaiHttp);
 
 //TODO: add more test cases
 describe("App", () => {
-
 	describe("弹幕解析模块测试", function () {
 		this.timeout(1000*10);
 		it("主页测试", (done) => {
@@ -98,60 +97,6 @@ describe("App", () => {
 				.get("/ipinfo/ddns")
 				.end((err, res) => {
 					res.text.should.have.string("subdomain");
-					done();
-				});
-		});
-	});
-	describe("机场订阅模块",function (){
-		this.timeout(1000*10);
-		it("接口不带参数测试",  (done) =>{
-			chai.request(app)
-				.get("/sub")
-				.end((err,res) => {
-					res.should.have.status(400);
-					done();
-				});
-		});
-		it("接口错误参数测试",  (done) =>{
-			chai.request(app)
-				.get("/sub?abc=123")
-				.end((err,res) => {
-					res.should.have.status(400);
-					done();
-				});
-		});
-		it("接口错误user参数测试",  (done) =>{
-			chai.request(app)
-				.get("/sub?user=123")
-				.end((err,res) => {
-					res.should.have.status(404);
-					done();
-				});
-		});
-		it("接口带user,订阅过期测试", (done) =>{
-			chai.request(app)
-				.get("/sub?user=test&ctype=v2ray")
-				.set("User-Agent","Mozilla/5.0 ")
-				.end((err,res) => {
-					res.should.have.status(200);
-					done();
-				});
-		});
-		it("缓存测试", (done) =>{
-			chai.request(app)
-				.get("/sub/cache")
-				.end((err,res) => {
-					res.should.have.status(200);
-					done();
-				});
-		});
-		it("软件下载测试", (done) =>{
-			chai.request(app)
-				.get("/sub/download")
-				.end((err,res) => {
-					res.should.have.status(200);
-					res.text.should.have.string("v2ray");
-					res.text.should.have.string("shadowsocks");
 					done();
 				});
 		});
