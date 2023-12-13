@@ -63,29 +63,29 @@ module.exports = (TOKEN) => {
 		}
 	});
 
-	// // 智能聊天机器人
-	// bot.on("text", (msg) => {
-	// 	if (msg.text.indexOf("/") === -1) {
-	// 		bot.sendMessage(msg.chat.id, `you said: ${msg.text}`);
-	// 		axios.get(`https://api.qingyunke.com/api.php?key=free&appid=0&msg=${encodeURI(msg.text)}`)
-	// 			.then((res) => {
-	// 				console.log(res.data);
-	// 				bot.sendMessage(msg.chat.id, res.data.content);
-	// 			});
-	// 	}
-	// });
-
-	// ChatGPT版智能聊天机器人
-	bot.on("text", async (msg) => {
+	// 智能聊天机器人
+	bot.on("text", (msg) => {
 		if (msg.text.indexOf("/") === -1) {
 			bot.sendMessage(msg.chat.id, `you said: ${msg.text}`);
-			let messages = openai_messages[msg.chat.id] || [], res;
-			[res, messages] = await openai.chat(msg.text, messages);
-			const length = (messages.length - 1) / 2;
-			bot.sendMessage(msg.chat.id, `${res}\n\nPowered by OpenAI 连续对话了${length}次`);
-			openai_messages[msg.chat.id] = messages;
+			axios.get(`https://api.qingyunke.com/api.php?key=free&appid=0&msg=${encodeURI(msg.text)}`)
+				.then((res) => {
+					console.log(res.data);
+					bot.sendMessage(msg.chat.id, res.data.content);
+				});
 		}
 	});
+
+	// ChatGPT版智能聊天机器人
+	// bot.on("text", async (msg) => {
+	// 	if (msg.text.indexOf("/") === -1) {
+	// 		bot.sendMessage(msg.chat.id, `you said: ${msg.text}`);
+	// 		let messages = openai_messages[msg.chat.id] || [], res;
+	// 		[res, messages] = await openai.chat(msg.text, messages);
+	// 		const length = (messages.length - 1) / 2;
+	// 		bot.sendMessage(msg.chat.id, `${res}\n\nPowered by OpenAI 连续对话了${length}次`);
+	// 		openai_messages[msg.chat.id] = messages;
+	// 	}
+	// });
 
 	bot.onText(/\/clear/, (msg) => {
 		openai_messages[msg.chat.id] = [];
