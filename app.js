@@ -10,7 +10,7 @@ require("dotenv")
 
 // 引入一个个路由模块
 const danmakuRouter = require("./routes/danmaku");
-const ipinfoRouter = require("./routes/ipinfo");
+// const ipinfoRouter = require("./routes/ipinfo");
 const airportsubRouter = require("./routes/airportsub");
 const imgRouter = require("./routes/img");
 // const schedule = require("./schedule/schedule");
@@ -38,7 +38,7 @@ app.use("/upload", express.static(__dirname + "/upload"));
 
 // 加载路由
 app.use("/", danmakuRouter);
-app.use("/ipinfo", ipinfoRouter);
+// app.use("/ipinfo", ipinfoRouter);
 app.use("/sub", airportsubRouter);
 app.use("/img", imgRouter);
 
