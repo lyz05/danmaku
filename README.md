@@ -11,7 +11,6 @@
 - mocha: 测试框架
 - ejs: 模板引擎
 - express: web框架
-- lib-qqwry: 纯真IP数据库
 
 # 运行此项目
 ``` sh
@@ -36,9 +35,10 @@ Express框架的性能也比Python的Django要好很多。
 
 # fly.io常用命令
 ``` sh
+flyctl status
 flyctl scale count 0
 flyctl regions add sea
-flyctl regions remove nrt
+flyctl regions remove hkg
 flyctl config env
 flyctl secrets set DEBUG=true
 flyctl ssh console
