@@ -7,7 +7,7 @@ require("dotenv").config({path: "../.env"});
 AV.init({
 	appId: process.env.LEANCLOUD_DANMAKU_APP_ID,
 	appKey: process.env.LEANCLOUD_DANMAKU_APP_KEY,
-	serverURL: "https://dbvunek8.lc-cn-e1-shared.com"
+	serverURL: "https://dbvunek8.lc-cn-n1-shared.com"
 });
 
 function currentDay() {
