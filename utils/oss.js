@@ -8,15 +8,15 @@ require("dotenv")
 
 let client = new OSS({
 	region: process.env.ALI_OSS_REGION,
-	accessKeyId: process.env.ALI_ACCESS_KEY,
-	accessKeySecret: process.env.ALI_ACCESS_KEY_SECRET,
+	accessKeyId: process.env.ALIBABA_CLOUD_ACCESS_KEY_ID,
+	accessKeySecret: process.env.ALIBABA_CLOUD_ACCESS_KEY_SECRET,
 	bucket: process.env.OSS_BUCKET,
 });
 
 let fastclient = new OSS({
 	region: fastregion,
-	accessKeyId: process.env.ALI_ACCESS_KEY,
-	accessKeySecret: process.env.ALI_ACCESS_KEY_SECRET,
+	accessKeyId: process.env.ALIBABA_CLOUD_ACCESS_KEY_ID,
+	accessKeySecret: process.env.ALIBABA_CLOUD_ACCESS_KEY_SECRET,
 	bucket: process.env.OSS_BUCKET,
 });
 
