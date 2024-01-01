@@ -15,10 +15,11 @@ const leancloud = require("../utils/leancloud");
 const rateLimit = require('express-rate-limit');
 
 // 访问频率限制
+const MAX_count_today = 2000;
 const allowlist = ['::1', '::ffff:127.0.0.1'];
 const apiLimiter = rateLimit({
-	windowMs: 24 * 60 * 60 * 1000, // 1 days
-	max: 1000, // limit each IP to 1000 requests per windowMs
+	windowMs: 2 * 60 * 1000, // 2 minutes
+	max: 8, // limit each IP to 8 requests per windowMs
 	message: 'Too many requests from this IP, please try again later',
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	skipFailedRequests: true, // Don't count failed requests (status >= 400)
@@ -26,14 +27,14 @@ const apiLimiter = rateLimit({
 });
 
 async function build_response(url, req) {
-	for (let q = new URLSearchParams(URL.parse(url).query);q.has("url");) {
+	for (let q = new URLSearchParams(URL.parse(url).query); q.has("url");) {
 		console.log("Redirecting to", url);
 		url = q.get("url");
 		q = new URLSearchParams(URL.parse(url).query);
 	}
 	console.log("Real url:", url);
 	try {
-		await axios.get(url,{
+		await axios.get(url, {
 			headers: { "Accept-Encoding": "gzip,deflate,compress" }
 		});
 	} catch (e) {
@@ -66,26 +67,12 @@ async function build_response(url, req) {
 	return ret;
 }
 
-/* GET home page. */
-router.get("/", apiLimiter, async function (req, res) {
-	leancloud.add("DanmakuAccess", {
-		remoteIP: req.ip,
-		url: req.query.url,
-		UA: req.headers["user-agent"]
-	});
-	//检查是否包含URL参数
-	if (!req.query.url) {
-		const urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
-		const path = req.protocol + "://" + req.headers.host + req.originalUrl;
-		res.render("danmaku", {
-			path,
-			urls
-		});
-	} else {
-		const url = req.query.url;
-		const download = (req.query.download === "on");
-		const ret = await build_response(url, req);
-		memory(); //显示内存使用量
+async function resolve(req, res) {
+	const url = req.query.url;
+	const download = (req.query.download === "on");
+	const ret = await build_response(url, req);
+	memory(); //显示内存使用量
+	try {
 		if (ret.msg !== "ok") {
 			res.status(403).send(ret.msg);
 			return;
@@ -98,8 +85,38 @@ router.get("/", apiLimiter, async function (req, res) {
 		if (ret.url)
 			res.redirect(ret.url);
 		else
-			res.render("danmaku-xml",{contents: ret.content});
+			res.render("danmaku-xml", { contents: ret.content });
+	} catch (e) {
+		console.log("返回响应出错，可能ip被封禁");
 	}
+}
+
+async function index(req, res) {
+	const urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
+	const path = req.protocol + "://" + req.headers.host + req.originalUrl;
+	res.render("danmaku", {
+		path,
+		urls
+	});
+}
+
+/* GET home page. */
+router.get("/", apiLimiter, async function (req, res) {
+	leancloud.add("DanmakuAccess", {
+		remoteIP: req.ip,
+		url: req.query.url,
+		UA: req.headers["user-agent"]
+	});
+	// 查询该IP今日访问次数
+	leancloud.danmakuQuery(leancloud.currentDay(), req.ip).then((count) => {
+		console.log("访问次数：", req.ip, count);
+		if (count > MAX_count_today) {
+			res.status(403).send("今日访问次数过多，请明日再试！");
+			return;
+		}
+	});
+	//检查是否包含URL参数
+	if (!req.query.url) index(req, res); else resolve(req, res);
 });
 
 router.get("/pageinfo", async function (req, res) {

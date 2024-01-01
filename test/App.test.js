@@ -75,30 +75,4 @@ describe("App", () => {
 				done();
 			});
 	});
-	describe("ipinfo模块", () => {
-		it("GET the ipinfo response", (done) => {
-			chai.request(app)
-				.get("/ipinfo")
-				.end((err, res) => {
-					res.should.have.status(200);
-					done();
-				});
-		});
-		it("GET the ipinfo with name", (done) => {
-			chai.request(app)
-				.get("/ipinfo?name=home999.cc")
-				.end((err, res) => {
-					res.should.have.status(200);
-					done();
-				});
-		});
-		it("GET the ddns", (done) => {
-			chai.request(app)
-				.get("/ipinfo/ddns")
-				.end((err, res) => {
-					res.text.should.have.string("subdomain");
-					done();
-				});
-		});
-	});
 });

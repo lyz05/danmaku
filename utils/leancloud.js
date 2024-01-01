@@ -1,3 +1,4 @@
+const { query } = require("express");
 const AV = require("leancloud-storage");
 const libqqwry = require("lib-qqwry");
 const qqwry = libqqwry();
@@ -31,10 +32,11 @@ function currentMonth() {
 	return [firstDay, lastDay];
 }
 
-async function danmakuQuery(date) {
+async function danmakuQuery(date, ip) {
 	const query = new AV.Query("DanmakuAccess");
 	query.greaterThanOrEqualTo("createdAt", date[0]);
 	query.lessThan("createdAt", date[1]);
+	if (ip) query.equalTo("remoteIP", ip);
 
 	query.exists("url");
 	return await query.count();
