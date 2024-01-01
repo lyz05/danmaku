@@ -10,12 +10,8 @@ require("dotenv")
 
 // 引入一个个路由模块
 const danmakuRouter = require("./routes/danmaku");
-// const ipinfoRouter = require("./routes/ipinfo");
 const airportsubRouter = require("./routes/airportsub");
-const imgRouter = require("./routes/img");
-// const schedule = require("./schedule/schedule");
-const DEBUG = process.env.DEBUG === "true" || false;
-
+const DEBUG = !(process.env.DEBUG === "false");
 const app = express();
 
 // view engine setup
@@ -38,9 +34,7 @@ app.use("/upload", express.static(__dirname + "/upload"));
 
 // 加载路由
 app.use("/", danmakuRouter);
-// app.use("/ipinfo", ipinfoRouter);
 app.use("/sub", airportsubRouter);
-app.use("/img", imgRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -59,14 +53,11 @@ app.use(function (err, req, res) {
 });
 
 if (!DEBUG) {
-	console.log("PRODUCTION MODE!该模式下TG机器人正常运行");
+	console.log("PRODUCTION MODE!该模式下TG机器人和日志记录正常运行");
 	// 引入TG机器人
 	require("./tgbot/tgbot");
-	// 引入定时任务模块
-	// const schedule = require("./schedule/schedule");
-	// schedule(app);
 } else {
-	console.log("DEBUG MODE!该模式下将关闭TG机器人");
+	console.log("DEBUG MODE!该模式下将关闭TG机器人与日志记录功能");
 }
 
 module.exports = app;

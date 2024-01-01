@@ -1,15 +1,19 @@
 const { query } = require("express");
-const AV = require("leancloud-storage");
 const libqqwry = require("lib-qqwry");
 const qqwry = libqqwry();
+let AV;
 // 引入环境变量
-require("dotenv").config({path: "../.env"});
+require("dotenv").config({ path: "../.env" });
+const DEBUG = !(process.env.DEBUG === "false");
 
-AV.init({
-	appId: process.env.LEANCLOUD_DANMAKU_APP_ID,
-	appKey: process.env.LEANCLOUD_DANMAKU_APP_KEY,
-	serverURL: "https://dbvunek8.lc-cn-n1-shared.com"
-});
+if (!DEBUG) {
+	AV = require("leancloud-storage");
+	AV.init({
+		appId: process.env.LEANCLOUD_DANMAKU_APP_ID,
+		appKey: process.env.LEANCLOUD_DANMAKU_APP_KEY,
+		serverURL: "https://dbvunek8.lc-cn-n1-shared.com"
+	});
+};
 
 function currentDay() {
 	const date = new Date();
@@ -33,6 +37,7 @@ function currentMonth() {
 }
 
 async function danmakuQuery(date, ip) {
+	if (!AV) return 0;
 	const query = new AV.Query("DanmakuAccess");
 	query.greaterThanOrEqualTo("createdAt", date[0]);
 	query.lessThan("createdAt", date[1]);
@@ -42,12 +47,13 @@ async function danmakuQuery(date, ip) {
 	return await query.count();
 }
 
-function add(className,obj) {
-  if (obj.ip || obj.remoteIP)
-    obj.ipCountry = getipCountry(obj.ip || obj.remoteIP);
+function add(className, obj) {
+	if (!AV) return;
+	if (obj.ip || obj.remoteIP)
+		obj.ipCountry = getipCountry(obj.ip || obj.remoteIP);
 	const classInstance = AV.Object.extend(className);
 	const record = new classInstance();
-	for (const key of Object.keys(obj)){
+	for (const key of Object.keys(obj)) {
 		record.set(key, obj[key]);
 	}
 	record.save().then((obj) => {
@@ -57,15 +63,15 @@ function add(className,obj) {
 }
 
 function getipCountry(ip) {
-  try {
-    const info = qqwry.searchIP(ip);
-    return info.Country+" "+info.Area;
-  } catch (e) {
-    return null;
-  }
+	try {
+		const info = qqwry.searchIP(ip);
+		return info.Country + " " + info.Area;
+	} catch (e) {
+		return null;
+	}
 }
 
-module.exports = {danmakuQuery, currentDay, currentMonth, lastDay, add};
+module.exports = { danmakuQuery, currentDay, currentMonth, lastDay, add };
 
 if (!module.parent) {
 }
