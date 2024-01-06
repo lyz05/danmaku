@@ -1,8 +1,5 @@
-# Fly.io Express项目
-包含如下子项目
- - airportsub: 用于机场订阅
- - danmaku：用于弹幕解析
- - tgbot: Telegram机器人
+# danmaku
+用于解析转换各大视频网站（芒果TV，腾讯视频，优酷视频，爱奇艺视频，哔哩哔哩）弹幕
 
 # 依赖
 - chai: 断言库
@@ -12,9 +9,9 @@
 
 # 运行此项目
 ``` sh
-pnpm install
-pnpm run dev
-pnpm run test # 单元测试
+npm install # 安装依赖
+npm run dev # 本地运行
+npm run test # 单元测试
 ```
 
 # 部署到fly.io
@@ -40,6 +37,7 @@ flyctl regions remove hkg
 flyctl config env
 flyctl secrets set DEBUG=true
 flyctl ssh console
+flyctl checks list
 ```
 
 # Node常用工具
