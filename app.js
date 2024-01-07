@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
+const compression = require('compression');
 // 引入环境变量
 require("dotenv")
 	.config();
@@ -13,6 +13,8 @@ const danmakuRouter = require("./routes/danmaku");
 const airportsubRouter = require("./routes/airportsub");
 const DEBUG = !(process.env.DEBUG === "false");
 const app = express();
+// 启用gzip压缩
+app.use(compression());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
