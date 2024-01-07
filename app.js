@@ -53,11 +53,9 @@ app.use(function (err, req, res) {
 });
 
 if (!DEBUG) {
-	console.log("PRODUCTION MODE!该模式下TG机器人和日志记录正常运行");
-	// 引入TG机器人
-	require("./tgbot/tgbot");
+	console.log("PRODUCTION MODE!该模式下日志记录正常运行");
 } else {
-	console.log("DEBUG MODE!该模式下将关闭TG机器人与日志记录功能");
+	console.log("DEBUG MODE!该模式下将关闭日志记录功能");
 }
 
 module.exports = app;
