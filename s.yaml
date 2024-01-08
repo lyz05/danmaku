@@ -7,7 +7,7 @@ vars: # 全局变量
   certId: 12106443
   service:
     name: fc-danmaku
-    logConfig: auto
+    # logConfig: auto
   triggers:
     - name: http_t
       type: http
