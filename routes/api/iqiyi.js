@@ -2,7 +2,6 @@ const axios = require("axios");
 const pako = require("pako");
 const {
 	time_to_second,
-	make_response,
 	content_template,
 } = require("./utils");
 const memory = require("../../utils/memory");

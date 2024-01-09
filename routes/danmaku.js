@@ -26,13 +26,16 @@ const apiLimiter = rateLimit({
 	skip: (request, response) => allowlist.includes(request.ip),
 });
 
+// 返回对象{msg: "ok", title: "标题", content: []}
 async function build_response(url, req) {
+	// 循环找最终url
 	for (let q = new URLSearchParams(URL.parse(url).query); q.has("url");) {
 		console.log("Redirecting to", url);
 		url = q.get("url");
 		q = new URLSearchParams(URL.parse(url).query);
 	}
 	console.log("Real url:", url);
+	// 测试url是否能下载
 	try {
 		await axios.get(url, {
 			headers: { "Accept-Encoding": "gzip,deflate,compress" }
@@ -41,15 +44,18 @@ async function build_response(url, req) {
 		console.log(e);
 		return { msg: "传入的链接非法！请检查链接是否能在浏览器正常打开" };
 	}
+	// 循环找到对应的解析器
 	let fc = undefined;
 	for (let item of list) {
 		if (url.indexOf(item.domain) !== -1) {
 			fc = item;
 		}
 	}
+	// 找不到对应的解析器
 	if (fc === undefined) {
 		return { "msg": "不支持的视频网址" };
 	}
+	// 捕获所有错误并添加日志
 	let ret;
 	try {
 		ret = await fc.work(url);
