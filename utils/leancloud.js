@@ -47,19 +47,19 @@ async function danmakuQuery(date, ip) {
 	return await query.count();
 }
 
-function add(className, obj) {
+async function add(className, obj) {
 	if (!AV) return;
-	if (obj.ip || obj.remoteIP)
-		obj.ipCountry = getipCountry(obj.ip || obj.remoteIP);
+	if (obj.remoteIP)
+		obj.ipCountry = getipCountry(obj.remoteIP);
 	const classInstance = AV.Object.extend(className);
 	const record = new classInstance();
 	for (const key of Object.keys(obj)) {
 		record.set(key, obj[key]);
 	}
-	record.save().then((obj) => {
-		// 成功保存之后，执行其他逻辑
-		console.log(`${className}添加一条记录。objectId：${obj.id}`);
-	});
+	console.log(record.attributes);
+	const o = await record.save()
+	// 成功保存之后，执行其他逻辑
+	console.log(`${className}添加一条记录。objectId：${o.id}`);
 }
 
 function getipCountry(ip) {
@@ -67,7 +67,7 @@ function getipCountry(ip) {
 		const info = qqwry.searchIP(ip);
 		return info.Country + " " + info.Area;
 	} catch (e) {
-		return null;
+		return "";
 	}
 }
 

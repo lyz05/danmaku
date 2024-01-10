@@ -23,7 +23,7 @@ app.set("trust proxy", true);
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false, validate: { trustProxy: false } }));
 app.use(cookieParser());
 // 加载静态资源
 app.use(express.static(path.join(__dirname, "public")));
@@ -32,7 +32,7 @@ app.use("/assets", [
 	express.static(__dirname + "/node_modules/bootstrap/dist/"),
 	express.static(__dirname + "/node_modules/axios/dist/"),
 ]);
-app.use("/upload", express.static(__dirname + "/upload"));
+// app.use("/upload", express.static(__dirname + "/upload"));
 
 // 加载路由
 app.use("/", danmakuRouter);
