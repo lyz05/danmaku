@@ -31,7 +31,7 @@ services:
       function:
         name: danmaku
         caPort: 3000
-        memorySize: 128
+        memorySize: 256
         timeout: 30
         runtime: custom-container
         customContainerConfig:
