@@ -6,4 +6,3 @@ async function main(ms) {
 };
 
 
-main().then(console.log("OK"));

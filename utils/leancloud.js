@@ -16,10 +16,10 @@ if (!DEBUG) {
 };
 
 function currentDay() {
-	const date = new Date();
+	const date = new Date(), y = date.getFullYear(), m = date.getMonth();
 	const start = new Date(date.setHours(0, 0, 0, 0));
 	const end = new Date(date.setHours(23, 59, 59, 999));
-	return [start, end];
+	return [start, end, y, m+1];
 }
 
 function lastDay() {
@@ -38,7 +38,8 @@ function currentMonth() {
 
 async function danmakuQuery(date, ip) {
 	if (!AV) return 0;
-	const query = new AV.Query("DanmakuAccess");
+	const className = `DanmakuAccess_${currentDay()[2]}_${currentDay()[3]}`;
+	const query = new AV.Query(className);
 	query.greaterThanOrEqualTo("createdAt", date[0]);
 	query.lessThan("createdAt", date[1]);
 	if (ip) query.equalTo("remoteIP", ip);
@@ -48,6 +49,8 @@ async function danmakuQuery(date, ip) {
 }
 
 async function add(className, obj) {
+	className = `${className}_${currentDay()[2]}_${currentDay()[3]}`;
+	console.log(className)
 	if (!AV) return;
 	if (obj.remoteIP)
 		obj.ipCountry = getipCountry(obj.remoteIP);
