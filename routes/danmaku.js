@@ -63,7 +63,7 @@ async function build_response(url, req) {
 		console.log(e);
 		let err = JSON.stringify(e, Object.getOwnPropertyNames(e));
 		err = JSON.parse(err);
-		await leancloud.add("DanmakuError", {
+		leancloud.add("DanmakuError", {
 			ip: req.ip,
 			url,
 			err
@@ -108,7 +108,7 @@ async function index(req, res) {
 
 /* GET home page. */
 router.get("/", apiLimiter, async function (req, res) {
-	await leancloud.add("DanmakuAccess", {
+	leancloud.add("DanmakuAccess", {
 		remoteIP: req.ip,
 		url: req.query.url,
 		UA: req.headers["user-agent"]

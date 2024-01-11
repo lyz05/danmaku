@@ -4,7 +4,7 @@ const leancloud = require("../utils/leancloud");
 
 /* GET users listing. */
 router.get("/", async function (req, res) {
-	await leancloud.add("SubAccess", {
+	leancloud.add("SubAccess", {
 		remoteIP: req.ip,
 		UA: req.headers["user-agent"],
 		user: req.query.user,

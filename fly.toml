@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for shy-field-2671 on 2023-05-02T01:26:21Z
+# fly.toml app configuration file generated for lyz05-danmaku on 2024-01-11T19:54:43+08:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "shy-field-2671"
+app = "lyz05-danmaku"
 primary_region = "sea"
 kill_signal = "SIGINT"
 kill_timeout = "5s"
@@ -11,29 +11,20 @@ kill_timeout = "5s"
 [experimental]
   auto_rollback = true
 
+[build]
+
 [env]
   PORT = "8080"
 
-[[services]]
-  protocol = "tcp"
+[http_service]
   internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
   processes = ["app"]
 
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-    force_https = true
-
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
-  [services.concurrency]
-    type = "connections"
-    hard_limit = 25
-    soft_limit = 20
-
-  [[services.tcp_checks]]
-    interval = "15s"
-    timeout = "2s"
-    grace_period = "1s"
-    restart_limit = 0
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
