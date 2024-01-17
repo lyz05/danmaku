@@ -31,6 +31,7 @@ app.use("/assets", [
 	express.static(__dirname + "/node_modules/jquery/dist/"),
 	express.static(__dirname + "/node_modules/bootstrap/dist/"),
 	express.static(__dirname + "/node_modules/axios/dist/"),
+	express.static(__dirname + "/node_modules/leancloud-storage/dist"),
 ]);
 // app.use("/upload", express.static(__dirname + "/upload"));
 

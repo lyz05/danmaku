@@ -22,20 +22,6 @@ function currentDay() {
 	return [start, end, y, m+1];
 }
 
-function lastDay() {
-	const currentday = currentDay();
-	currentday[0].setDate(currentday[0].getDate() - 1);
-	currentday[1].setDate(currentday[1].getDate() - 1);
-	return currentday;
-}
-
-function currentMonth() {
-	const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-	const firstDay = new Date(y, m, 1);
-	const lastDay = new Date(y, m + 1, 0);
-	return [firstDay, lastDay];
-}
-
 async function danmakuQuery(date, ip) {
 	if (!AV) return 0;
 	const className = `DanmakuAccess_${currentDay()[2]}_${currentDay()[3]}`;
@@ -74,7 +60,13 @@ function getipCountry(ip) {
 	}
 }
 
-module.exports = { danmakuQuery, currentDay, currentMonth, lastDay, add };
+module.exports = { danmakuQuery, currentDay, add };
 
 if (!module.parent) {
 }
+// curl -X POST \
+//   -H "X-LC-Id: {{appid}}" \
+//   -H "X-LC-Key: {{appkey}}" \
+//   -H "Content-Type: application/json" \
+//   -d '{"content": "每个 Java 程序员必备的 8 个开发工具","pubUser": "官方客服","pubTimestamp": 1435541999}' \
+//   https://{{host}}/1.1/classes/Post

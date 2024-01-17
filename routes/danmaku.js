@@ -125,18 +125,4 @@ router.get("/", apiLimiter, async function (req, res) {
 	if (!req.query.url) index(req, res); else resolve(req, res);
 });
 
-router.get("/pageinfo", async function (req, res) {
-	const promises = [
-		leancloud.danmakuQuery(leancloud.currentDay()),
-		leancloud.danmakuQuery(leancloud.lastDay()),
-		leancloud.danmakuQuery(leancloud.currentMonth())
-	];
-	const [today_visited, lastday_visited, month_visited] = await Promise.all(promises);
-	res.json({
-		today_visited,
-		lastday_visited,
-		month_visited
-	});
-});
-
 module.exports = router;
