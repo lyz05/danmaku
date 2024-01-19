@@ -4,12 +4,12 @@ const leancloud = require("../utils/leancloud");
 
 /* GET users listing. */
 router.get("/", async function (req, res) {
-	leancloud.add("SubAccess", {
-		remoteIP: req.ip,
-		UA: req.headers["user-agent"],
-		user: req.query.user,
-		ctype: req.query.ctype
-	});
+	// leancloud.add("SubAccess", {
+	// 	remoteIP: req.ip,
+	// 	UA: req.headers["user-agent"],
+	// 	user: req.query.user,
+	// 	ctype: req.query.ctype
+	// });
 	if (req.query.user) {
 			if (req.query.ctype) {
 				res.redirect("https://sub.home999.cc/sub/"+req.query.user+"/"+req.query.ctype);
