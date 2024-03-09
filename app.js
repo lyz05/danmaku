@@ -10,7 +10,6 @@ require("dotenv")
 
 // 引入一个个路由模块
 const danmakuRouter = require("./routes/danmaku");
-const airportsubRouter = require("./routes/airportsub");
 const DEBUG = !(process.env.DEBUG === "false");
 const app = express();
 // 启用gzip压缩
@@ -37,7 +36,6 @@ app.use("/assets", [
 
 // 加载路由
 app.use("/", danmakuRouter);
-app.use("/sub", airportsubRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
