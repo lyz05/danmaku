@@ -25,7 +25,7 @@ services:
       pre-deploy: # 在deploy之前运行
         - component: fc build --use-docker --dockerfile ./Dockerfile  # 要运行的组件，格式为【component: 组件名 命令 参数】（可以通过s cli registry search --type Component 获取组件列表）
       post-deploy:
-        - run: curl -I -X GET https://fc.home999.cc/
+        - run: curl -I -X GET https://fc.lyz05.cn/
     props:
       region: ${vars.region} # 关于变量的使`1用方法，可以参考：https://www.serverless-devs.com/serverless-devs/yaml#变量赋值
       service: ${vars.service}
@@ -40,7 +40,7 @@ services:
         instanceConcurrency: 50        # 单实例多并发
       triggers: ${vars.triggers}
       customDomains:
-        - domainName: fc.home999.cc
+        - domainName: fc.lyz05.cn
           protocol: HTTP,HTTPS
           routeConfigs: 
             - path: /*
