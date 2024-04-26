@@ -12,19 +12,19 @@ const {
 const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
 const memory = require("../utils/memory");
 const leancloud = require("../utils/leancloud");
-const rateLimit = require('express-rate-limit');
+// const rateLimit = require('express-rate-limit');
 
 // 访问频率限制
-const MAX_count_today = 1000;
-const allowlist = ['::1', '::ffff:127.0.0.1'];
-const apiLimiter = rateLimit({
-	windowMs: 2 * 60 * 1000, // 2 minutes
-	max: 10, // limit each IP to 10 requests per windowMs
-	message: 'Too many requests from this IP, please try again later',
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	skipFailedRequests: true, // Don't count failed requests (status >= 400)
-	skip: (request, response) => allowlist.includes(request.ip),
-});
+// const MAX_count_today = 1000;
+// const allowlist = ['::1', '::ffff:127.0.0.1'];
+// const apiLimiter = rateLimit({
+// 	windowMs: 2 * 60 * 1000, // 2 minutes
+// 	max: 10, // limit each IP to 10 requests per windowMs
+// 	message: 'Too many requests from this IP, please try again later',
+// 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+// 	skipFailedRequests: true, // Don't count failed requests (status >= 400)
+// 	skip: (request, response) => allowlist.includes(request.ip),
+// });
 
 // 返回对象{msg: "ok", title: "标题", content: []}
 async function build_response(url, req) {
@@ -107,20 +107,20 @@ async function index(req, res) {
 }
 
 /* GET home page. */
-router.get("/", apiLimiter, async function (req, res) {
+router.get("/", async function (req, res) {
 	leancloud.add("DanmakuAccess", {
 		remoteIP: req.ip,
 		url: req.query.url,
 		UA: req.headers["user-agent"]
 	});
 	// 查询该IP今日访问次数,异步查询
-	leancloud.danmakuQuery(leancloud.currentDay(), req.ip).then((count) => {
-		console.log("访问次数：", req.ip, count);
-		if (count > MAX_count_today) {
-			res.status(403).send("今日访问次数过多，请明日再试！");
-			return;
-		}
-	});
+	// leancloud.danmakuQuery(leancloud.currentDay(), req.ip).then((count) => {
+	// 	console.log("访问次数：", req.ip, count);
+	// 	if (count > MAX_count_today) {
+	// 		res.status(403).send("今日访问次数过多，请明日再试！");
+	// 		return;
+	// 	}
+	// });
 	//检查是否包含URL参数
 	if (!req.query.url) index(req, res); else resolve(req, res);
 });
