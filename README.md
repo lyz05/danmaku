@@ -38,6 +38,7 @@ flyctl config env
 flyctl secrets set DEBUG=true
 flyctl ssh console
 flyctl checks list
+flyctl ssh sftp get /app/db/danmaku.db
 ```
 
 # Node常用工具

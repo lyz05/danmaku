@@ -10,7 +10,6 @@ require("dotenv")
 
 // 引入一个个路由模块
 const danmakuRouter = require("./routes/danmaku");
-const DEBUG = !(process.env.DEBUG === "false");
 const app = express();
 // 启用gzip压缩
 app.use(compression());
@@ -32,7 +31,6 @@ app.use("/assets", [
 	express.static(__dirname + "/node_modules/axios/dist/"),
 	express.static(__dirname + "/node_modules/leancloud-storage/dist"),
 ]);
-// app.use("/upload", express.static(__dirname + "/upload"));
 
 // 加载路由
 app.use("/", danmakuRouter);
@@ -52,11 +50,5 @@ app.use(function (err, req, res) {
 	res.status(err.status || 500);
 	res.render("error");
 });
-
-if (!DEBUG) {
-	console.log("PRODUCTION MODE!该模式下日志记录正常运行");
-} else {
-	console.log("DEBUG MODE!该模式下将关闭日志记录功能");
-}
 
 module.exports = app;

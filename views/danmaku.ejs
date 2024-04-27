@@ -35,7 +35,17 @@
             </p>
         </div>
         <div class="col-sm-4">
-
+            <h4>最近一天下载热榜</h4>
+            <ul id="hotlist">
+                <% hotlist.forEach(function(item) { %>
+                    <li>
+                        <a href="<%= item.url %>">
+                            <%= item.title %>
+                        </a> - <%= item.count %> 次访问
+                    </li>
+                <% }); %>
+                <!-- 更多列表项 -->
+            </ul>
         </div>
     </div>
     <div class="row">
@@ -82,63 +92,14 @@
         </div>
 
         <div class="row">
-            今日解析量：<span id="today_visited"></span><span class="post-meta-divider"> | </span>
-            昨日解析量：<span id="lastday_visited"></span><span class="post-meta-divider"> | </span>
-            当月解析量：<span id="month_visited"></span>
+            今日解析量：<span id="today_visited"><%= resolve_info.today_visited %></span><span class="post-meta-divider"> | </span>
+            昨日解析量：<span id="lastday_visited"><%= resolve_info.lastday_visited %></span><span class="post-meta-divider"> | </span>
+            近一个月解析量：<span id="month_visited"><%= resolve_info.month_visited %></span>
         </div>
 
     </footer>
 </div>
 
 </body>
-<script>
-	AV.init({
-		appId: "DBvUNEk87tttf0zxelzVRfuW-9Nh9j0Va",
-		appKey: "CnqCkxWUFTmxwzCqu1alwFEm",
-		serverURL: "https://dbvunek8.lc-cn-n1-shared.com"
-	});
-
-    function currentDay() {
-        const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-        const start = new Date(date.setHours(0, 0, 0, 0));
-        const end = new Date(date.setHours(23, 59, 59, 999));
-        return [start, end, y, m+1];
-    }
-
-    function lastDay() {
-        const currentday = currentDay();
-        currentday[0].setDate(currentday[0].getDate() - 1);
-        currentday[1].setDate(currentday[1].getDate() - 1);
-        return currentday;
-    }
-
-    function currentMonth() {
-        const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-        const firstDay = new Date(y, m, 1);
-        const lastDay = new Date(y, m + 1, 0);
-        return [firstDay, lastDay];
-    }
-
-    function danmakuQuery(date, ip) {
-        const className = `DanmakuAccess_${currentDay()[2]}_${currentDay()[3]}`;
-        const query = new AV.Query(className);
-        query.greaterThanOrEqualTo("createdAt", date[0]);
-        query.lessThan("createdAt", date[1]);
-        if (ip) query.equalTo("remoteIP", ip);
-
-        query.exists("url");
-        return query.count();
-    }
-
-    danmakuQuery(currentDay()).then((count)=>{
-        $('#today_visited').text(count);
-    });
-    danmakuQuery(lastDay()).then((count)=>{
-        $('#lastday_visited').text(count);
-    });
-    danmakuQuery(currentMonth()).then((count)=>{
-        $('#month_visited').text(count);
-    });
-</script>
 
 </html>
