@@ -77,8 +77,10 @@ async function resolve(req, res) {
 	//B站视频，直接重定向
 	if (ret.url)
 		res.redirect(ret.url);
-	else
+	else {
+		res.set('Cache-Control', 'public, max-age=86400'); // one year
 		res.render("danmaku-xml", { contents: ret.content });
+	}
 }
 
 async function index(req, res) {

@@ -24,12 +24,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false, validate: { trustProxy: false } }));
 app.use(cookieParser());
 // 加载静态资源
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public"), {maxAge: 86400*1000 }));
 app.use("/assets", [
-	express.static(__dirname + "/node_modules/jquery/dist/"),
-	express.static(__dirname + "/node_modules/bootstrap/dist/"),
-	express.static(__dirname + "/node_modules/axios/dist/"),
-	express.static(__dirname + "/node_modules/leancloud-storage/dist"),
+	express.static(__dirname + "/node_modules/jquery/dist/",{maxAge: 86400*1000}),
+	express.static(__dirname + "/node_modules/bootstrap/dist/",{maxAge: 86400*1000}),
+	express.static(__dirname + "/node_modules/axios/dist/",{maxAge: 86400*1000}),
+	express.static(__dirname + "/node_modules/leancloud-storage/dist",{maxAge: 86400*1000}),
 ]);
 
 // 加载路由
