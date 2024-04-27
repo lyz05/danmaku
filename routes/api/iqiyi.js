@@ -97,14 +97,13 @@ function Iqiyi() {
 			const data = datas[i];
 			let xml = pako.inflate(data, { to: "string" });
 			this.xml2json(xml, contents,datas.length);
-			data[i] = undefined;
-			xml = undefined;
+			datas[i] = null;
+			xml = null;
 			if (global.gc) {
 				global.gc();
 			}
 			memory();
 		}
-		datas = undefined;
 		// contents = make_response(contents);
 		memory();
 		return contents;

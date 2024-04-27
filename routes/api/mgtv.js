@@ -32,8 +32,9 @@ function Mgtv() {
 
 	this.parse = async (promises) => {
 		let contents = [];
-		const values = await Promise.all(promises);
-		let datas = values.map(value => value.data);
+		const results = await Promise.allSettled(promises);
+		let datas = results.filter(result => result.status === 'fulfilled')
+			.map(result => result.value.data);
 		for (const data of datas) {
 			if (data.data.items === null)
 				continue;

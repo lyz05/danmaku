@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: false, validate: { trustProxy: false } })
 app.use(cookieParser());
 // 加载静态资源
 app.use(express.static(path.join(__dirname, "public"), {maxAge: 86400*1000 }));
+app.use(express.static(path.join(__dirname,"db")))
 app.use("/assets", [
 	express.static(__dirname + "/node_modules/jquery/dist/",{maxAge: 86400*1000}),
 	express.static(__dirname + "/node_modules/bootstrap/dist/",{maxAge: 86400*1000}),

@@ -88,7 +88,6 @@ async function index(req, res) {
 	const path = req.protocol + "://" + req.headers.host + req.originalUrl;
 	const resolve_info = await db.accesscountquery()
 	const hotlist = await db.hotlistquery()
-	console.log(hotlist)
 	res.render("danmaku", {
 		path,
 		urls,

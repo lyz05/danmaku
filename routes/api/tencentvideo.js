@@ -9,6 +9,7 @@ function Tencentvideo() {
 	this.example_urls = [
 		"https://v.qq.com/x/cover/53q0eh78q97e4d1/x00174aq5no.html",//api lens 50
 		"https://v.qq.com/x/cover/mzc00200fph94nw/l00448ijvve.html",//api lens 91
+		"https://v.qq.com/x/cover/mzc00200fhhxx8d/h0046u6z1iu.html",//api lens 215 OOM
 	];
 
 	this.resolve = async (url) => {
@@ -45,8 +46,9 @@ function Tencentvideo() {
 
 	this.parse = async (promises) => {
 		let contents = [];
-		const values = await Promise.all(promises);
-		let datas = values.map(value => value.data);
+		const results = await Promise.allSettled(promises);
+		let datas = results.filter(result => result.status === 'fulfilled')
+			.map(result => result.value.data);
 
 		for (const data of datas) {
 			for (const item of data.barrage_list) {
