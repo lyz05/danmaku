@@ -10,6 +10,7 @@ function Tencentvideo() {
 		"https://v.qq.com/x/cover/53q0eh78q97e4d1/x00174aq5no.html",//api lens 50
 		"https://v.qq.com/x/cover/mzc00200fph94nw/l00448ijvve.html",//api lens 91
 		"https://v.qq.com/x/cover/mzc00200fhhxx8d/h0046u6z1iu.html",//api lens 215 OOM
+		"https://v.qq.com/x/cover/0s4fa14ciz3ohd0/p0047w54ncc.html",//api lens 297 OOM
 	];
 
 	this.resolve = async (url) => {

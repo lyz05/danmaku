@@ -12,7 +12,8 @@ function Iqiyi() {
 	this.domain = "iqiyi.com";
 	this.example_urls = [
 		"https://www.iqiyi.com/v_19rr1lm35o.html", //api lens 11
-		"http://www.iqiyi.com/v_1qzx9b00hs4.html?vfm=m_331_dbdy" //api lens 25
+		"http://www.iqiyi.com/v_1qzx9b00hs4.html?vfm=m_331_dbdy", //api lens 25
+		"https://www.iqiyi.com/v_19rr1lm35o.html",
 	];
 
 	this.resolve = async (url) => {
