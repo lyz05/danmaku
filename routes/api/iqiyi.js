@@ -24,15 +24,15 @@ function Iqiyi() {
 			}
 		});
 		const data = res.data;
-		const result = data.match(/window.Q.PageInfo.playPageInfo=(.*);/);
-		const page_info = JSON.parse(result[1]);
+		const result = data.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/);
+		let page_info = JSON.parse(result[1]);
 		// console.log('page_info:', page_info)
-
+		page_info = page_info.props.pageProps.videoInfo
 		const duration = time_to_second(page_info.duration);
 		this.title = page_info.tvName ? page_info.tvName : page_info.name;
 		const albumid = page_info.albumId;
 		const tvid = page_info.tvId.toString();
-		const categoryid = page_info.cid;
+		const categoryid = page_info.channelId;
 		const page = Math.round(duration / (60 * 5));
 		console.log("tvid", tvid);
 		let promises = [];

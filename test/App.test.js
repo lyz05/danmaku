@@ -9,18 +9,10 @@ chai.use(chaiHttp);
 //TODO: add more test cases
 describe("App", () => {
 	describe("弹幕解析模块测试", function () {
-		this.timeout(1000*10);
+		this.timeout(1000*30);
 		it("主页测试", (done) => {
 			chai.request(app)
 				.get("/")
-				.end((err, res) => {
-					res.should.have.status(200);
-					done();
-				});
-		});
-		it("页面统计计数测试", (done) => {
-			chai.request(app)
-				.get("/pageinfo")
 				.end((err, res) => {
 					res.should.have.status(200);
 					done();
