@@ -27,7 +27,7 @@ kill_timeout = "5s"
 [[vm]]
   cpu_kind = "shared"
   cpus = 1
-  memory_mb = 512
+  memory_mb = 256
 
 [mounts]
   source="danmaku"

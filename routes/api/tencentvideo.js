@@ -1,7 +1,9 @@
 const urlmodule = require("url");
 const axios = require("axios");
 const whacko = require("whacko");
-const {content_template} = require("./utils");
+const {content_template,fetchInBatches} = require("./utils");
+const fs = require("fs")
+const memory = require("../../utils/memory");
 
 function Tencentvideo() {
 	this.name = "腾讯视频";
@@ -37,20 +39,24 @@ function Tencentvideo() {
 			} else throw e;
 		}
 
-		let promises = [];
+		// let promises = [];
+		let urls = [];
 		let list = Object.values(res.data.segment_index);
 		for (const item of list) {
-			promises.push(axios.get(`${api_danmaku_segment}${vid}/${item.segment_name}`));
+			urls.push(`${api_danmaku_segment}${vid}/${item.segment_name}`)
+			// promises.push(axios.get(`${api_danmaku_segment}${vid}/${item.segment_name}`));
 		}
-		return promises;
+		return urls;
 	};
 
-	this.parse = async (promises) => {
+	this.parse = async (urls) => {
 		let contents = [];
-		const results = await Promise.allSettled(promises);
-		let datas = results.filter(result => result.status === 'fulfilled')
-			.map(result => result.value.data);
-
+		// const results = await Promise.allSettled(promises);
+		// let datas = results.filter(result => result.status === 'fulfilled')
+		// 	.map(result => result.value.data);
+		memory()
+		let datas = await fetchInBatches(urls)
+		memory()
 		for (const data of datas) {
 			for (const item of data.barrage_list) {
 				const content = JSON.parse(JSON.stringify(content_template));
@@ -63,6 +69,7 @@ function Tencentvideo() {
 				contents.push(content);
 			}
 		}
+		memory()
 		// contents = make_response(contents);
 		return contents;
 	};
@@ -87,8 +94,8 @@ module.exports = Tencentvideo;
 if (!module.parent) {
 	console.log("main");
 	const t = new Tencentvideo();
-	t.work(t.example_urls[0]).then(() => {
-		console.log(t.content);
+	t.work(t.example_urls[2]).then(() => {
+		// console.log(t.content);
 		console.log(t.title);
 	});
 }

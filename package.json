@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "ali-oss": "^6.17.1",
-    "axios": "^1.2.1",
+    "axios": "^1.6.8",
     "bootstrap": "^3.4.1",
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
