@@ -73,7 +73,7 @@ async function resolve(req, res) {
 		res.type("application/xml");
 	}
 	// 记录视频信息
-	db.videoinfoInsert({url,title:ret.title})
+	db.videoInfoInsert({url,title:ret.title})
 	//B站视频，直接重定向
 	if (ret.url)
 		res.redirect(ret.url);
@@ -86,8 +86,8 @@ async function resolve(req, res) {
 async function index(req, res) {
 	const urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
 	const path = req.protocol + "://" + req.headers.host + req.originalUrl;
-	const resolve_info = await db.accesscountquery()
-	const hotlist = await db.hotlistquery()
+	const resolve_info = await db.accessCountQuery()
+	const hotlist = await db.hotlistQuery()
 	res.render("danmaku", {
 		path,
 		urls,
@@ -105,6 +105,11 @@ router.get("/", async function (req, res) {
 	});
 	//检查是否包含URL参数
 	if (!req.query.url) index(req, res); else resolve(req, res);
+});
+
+router.get("/delete", async function (req, res) {
+	const rows = await db.deleteAccess();
+	res.send(`删除三个月以前的记录，删除了${rows}条记录`);
 });
 
 module.exports = router;
