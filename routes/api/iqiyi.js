@@ -70,7 +70,7 @@ function Iqiyi() {
 		const danmaku = extract(xml, "content");
 		const showTime = extract(xml, "showTime");
 		const color = extract(xml, "color");
-		const font = extract(xml, "font");
+		//const font = extract(xml, "font");
 
     // 控制步长，减小内存占用
     const step = Math.ceil(danmaku.length*length/10000);
@@ -81,7 +81,7 @@ function Iqiyi() {
 			content.timepoint = showTime[i];//showTime
 			content.color = parseInt(color[i], 16);//color
 			content.content = danmaku[i]; //content
-			content.size = font[i];//font
+			content.size = 25;//font
 			contents.push(content);
 		}
 	};
