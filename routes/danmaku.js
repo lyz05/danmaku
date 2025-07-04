@@ -116,8 +116,8 @@ router.get("/", async function (req, res) {
 });
 
 router.get("/delete", async function (req, res) {
-	const rows = await db.deleteAccess();
-	res.send(`删除三个月以前的记录，删除了${rows}条记录`);
+	const rows = db.deleteAccess();
+	res.send(`成功请求删除三个月以前的记录，删除情况请查看日志`);
 });
 
 module.exports = router;

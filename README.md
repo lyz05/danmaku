@@ -30,6 +30,7 @@ Express框架的性能也比Python的Django要好很多。
 
 # fly.io常用命令
 ``` sh
+flyctl logs
 flyctl status
 flyctl scale count 0
 flyctl regions add sea

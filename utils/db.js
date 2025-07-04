@@ -117,6 +117,7 @@ async function deleteAccess() {
     changes += result.changes;
     // vacuum
     await run("vacuum");
+    console.log("deleteAccess Affect Rows:",changes)
     return changes; // 提取删除的行数
   } catch (err) {
     console.error('Error during data deletion:', err.message);
