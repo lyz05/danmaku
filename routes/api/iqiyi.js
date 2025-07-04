@@ -26,6 +26,7 @@ function Iqiyi() {
 		});
 		const data = res.data;
 		const result = data.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/);
+		console.log(url)
 		let page_info = JSON.parse(result[1]);
 		// console.log('page_info:', page_info)
 		page_info = page_info.props.pageProps.videoInfo

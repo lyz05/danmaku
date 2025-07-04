@@ -7,9 +7,10 @@ const {
 	mgtv,
 	tencentvideo,
 	youku,
-	iqiyi
+	iqiyi,
+	gamer,
 } = require("./api/base");
-const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
+const list = [bilibili, mgtv, tencentvideo, youku, iqiyi, gamer];
 const memory = require("../utils/memory");
 const db = require("../utils/db");
 
@@ -29,7 +30,12 @@ async function build_response(url, req) {
 		});
 	} catch (e) {
 		console.log(e);
-		return { msg: "传入的链接非法！请检查链接是否能在浏览器正常打开" };
+		// 如果是 403 错误，不报错，继续执行
+		if (e.response && e.response.status === 403) {
+			console.log("访问视频页面 403 错误，有可能被防火墙拦了");
+		} else {
+			return { msg: "传入的链接非法！请检查链接是否能在浏览器正常打开" };
+		}
 	}
 	// 循环找到对应的解析器
 	let fc = undefined;
@@ -84,13 +90,15 @@ async function resolve(req, res) {
 }
 
 async function index(req, res) {
-	const urls = [mgtv.example_urls[0], bilibili.example_urls[0], tencentvideo.example_urls[0], youku.example_urls[0], iqiyi.example_urls[0]];
+	const urls = list.map(item => item.example_urls[0]);
+	const names = list.map(item => item.name);
 	const path = req.protocol + "://" + req.headers.host + req.originalUrl;
 	const resolve_info = await db.accessCountQuery()
 	const hotlist = await db.hotlistQuery()
 	res.render("danmaku", {
 		path,
 		urls,
+		names,
 		resolve_info,
 		hotlist
 	});

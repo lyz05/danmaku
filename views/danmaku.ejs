@@ -20,7 +20,11 @@
             </p>
             <p>
                 使用方法：在当前页面添加一个查询字符串url<br/>
-                目前支持芒果TV，腾讯视频，优酷视频，爱奇艺视频，哔哩哔哩。<br/>
+                目前支持
+                <% names.forEach(function(name, idx) { %>
+                    <%= name %><% if(idx !== names.length - 1) { %>，<% } %>
+                <% }); %>。
+                <br/>
                 注意：目前只支持单个视频的解析，不支持专辑的解析。<br/>
                 赞助一下服务器费用吧！<a href="https://blog.lyz05.cn/about/#%E6%89%93%E8%B5%8F">打赏链接</a><br/>
                 遇到什么问题，或有任何意见可以在<a href="https://github.com/lyz05/danmaku/issues">Issue</a>中提出<br/>

@@ -1,8 +1,8 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 let app = require("../app");
-const { bilibili, mgtv, tencentvideo, youku, iqiyi } = require("../routes/api/base");
-const list = [bilibili, mgtv, tencentvideo, youku, iqiyi];
+const { bilibili, mgtv, tencentvideo, youku, iqiyi, gamer } = require("../routes/api/base");
+const list = [bilibili, mgtv, tencentvideo, youku, iqiyi, gamer];
 chai.should();
 chai.use(chaiHttp);
 
