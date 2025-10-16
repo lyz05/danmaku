@@ -13,28 +13,28 @@ const {
 const list = [bilibili, mgtv, tencentvideo, youku, iqiyi, gamer];
 const memory = require("../utils/memory");
 const db = require("../utils/db");
+const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
 // 返回对象{msg: "ok", title: "标题", content: []}
 async function build_response(url, req) {
-	// 循环找最终url
-	for (let q = new URLSearchParams(URL.parse(url).query); q.has("url");) {
-		console.log("Redirecting to", url);
-		url = q.get("url");
-		q = new URLSearchParams(URL.parse(url).query);
-	}
-	console.log("Real url:", url);
 	// 测试url是否能下载
 	try {
-		await axios.get(url, {
-			headers: { "Accept-Encoding": "gzip,deflate,compress" }
+		const response = await axios.get(url, {
+			headers: { 
+				"Accept-Encoding": "gzip,deflate,compress",
+				"User-Agent": UA
+			},
+			maxRedirects: 10
 		});
+		url = response.request.res.responseUrl || url;
+        console.log("Real url:", url);
 	} catch (e) {
 		console.log(e);
 		// 如果是 403 错误，不报错，继续执行
 		if (e.response && e.response.status === 403) {
 			console.log("访问视频页面 403 错误，有可能被防火墙拦了");
 		} else {
-			return { msg: "传入的链接非法！请检查链接是否能在浏览器正常打开" };
+			return { msg: "传入的链接非法！请检查链接能否能在浏览器正常打开" };
 		}
 	}
 	// 循环找到对应的解析器
