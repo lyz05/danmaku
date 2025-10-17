@@ -92,6 +92,7 @@ async function resolve(req, res) {
 async function index(req, res) {
 	const urls = list.map(item => item.example_urls[0]);
 	const names = list.map(item => item.name);
+	const domains = list.map(item => item.domain);
 	const path = req.protocol + "://" + req.headers.host + req.originalUrl;
 	const resolve_info = await db.accessCountQuery()
 	const hotlist = await db.hotlistQuery()
@@ -99,6 +100,7 @@ async function index(req, res) {
 		path,
 		urls,
 		names,
+		domains,
 		resolve_info,
 		hotlist
 	});

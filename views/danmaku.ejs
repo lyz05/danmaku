@@ -22,7 +22,7 @@
                 使用方法：在当前页面添加一个查询字符串url<br/>
                 目前支持
                 <% names.forEach(function(name, idx) { %>
-                    <%= name %><% if(idx !== names.length - 1) { %>，<% } %>
+                    <a href="https://<%= domains[idx] %>"><%= name %></a><% if (idx !== names.length - 1) { %>，<% } %>
                 <% }); %>。
                 <br/>
                 注意：目前只支持单个视频的解析，不支持专辑的解析。<br/>
