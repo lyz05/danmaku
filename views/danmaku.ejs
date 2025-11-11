@@ -14,15 +14,15 @@
         <div class="col-sm-8">
             <p>
                 这是一个弹幕文件解析接口！输入你要解析的视频地址，即可获得B站弹幕形式的XML文件。<br/>
-                通过使用<a href="https:///www.dandanplay.com/">弹弹Play播放器</a>
-                或者<a href='https://tiansh.github.io/us-danmaku/bilibili/'>bilibili ASS 弹幕在线转换项目</a>
+                通过使用<a href="https:///www.dandanplay.com/" target="_blank" rel="noopener noreferrer">弹弹Play播放器</a>
+                或者<a href='https://tiansh.github.io/us-danmaku/bilibili/' target="_blank" rel="noopener noreferrer">bilibili ASS 弹幕在线转换项目</a>
                 转换为普通字幕文件，即可在本地播放器中播放。
             </p>
             <p>
                 使用方法：在当前页面添加一个查询字符串url<br/>
                 目前支持
                 <% names.forEach(function(name, idx) { %>
-                    <a href="https://<%= domains[idx] %>"><%= name %></a><% if (idx !== names.length - 1) { %>，<% } %>
+                    <a href="https://<%= domains[idx] %>" target="_blank" rel="noopener noreferrer"><%= name %></a><% if (idx !== names.length - 1) { %>，<% } %>
                 <% }); %>。
                 <br/>
                 注意：目前只支持单个视频的解析，不支持专辑的解析。<br/>
