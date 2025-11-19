@@ -41,14 +41,7 @@
         <div class="col-sm-4">
             <h4>最近一天下载热榜</h4>
             <ul id="hotlist">
-                <% hotlist.forEach(function(item) { %>
-                    <li>
-                        <a href="<%= item.url %>">
-                            <%= item.title %>
-                        </a> - <%= item.count %> 次访问
-                    </li>
-                <% }); %>
-                <!-- 更多列表项 -->
+                <!-- 异步加载 hotlist -->
             </ul>
         </div>
     </div>
@@ -97,14 +90,41 @@
         </div>
 
         <div class="row">
-            今日解析量：<span id="today_visited"><%= resolve_info.today_visited %></span><span class="post-meta-divider"> | </span>
-            昨日解析量：<span id="lastday_visited"><%= resolve_info.lastday_visited %></span><span class="post-meta-divider"> | </span>
-            近一个月解析量：<span id="month_visited"><%= resolve_info.month_visited %></span>
+            今日解析量：<span id="today_visited">加载中...</span><span class="post-meta-divider"> | </span>
+            昨日解析量：<span id="lastday_visited">加载中...</span><span class="post-meta-divider"> | </span>
+            近一个月解析量：<span id="month_visited">加载中...</span>
         </div>
 
     </footer>
 </div>
 
 </body>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "/api/home-data",
+        method: "GET",
+        dataType: "json",
+        success: function(data) {
+            // 更新热榜
+            var hotlistEl = $("#hotlist");
+            hotlistEl.empty();
+            data.hotlist.forEach(function(item) {
+                hotlistEl.append(
+                    `<li><a href="${item.url}">${item.title}</a> - ${item.count} 次访问</li>`
+                );
+            });
 
+            // 更新访问统计
+            $("#today_visited").text(data.resolve_info.today_visited);
+            $("#lastday_visited").text(data.resolve_info.lastday_visited);
+            $("#month_visited").text(data.resolve_info.month_visited);
+        },
+        error: function(xhr, status, err) {
+            console.error("加载首页数据失败", err);
+            $("#hotlist").html("<li>加载失败</li>");
+        }
+    });
+});
+</script>
 </html>

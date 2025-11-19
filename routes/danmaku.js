@@ -94,17 +94,26 @@ async function index(req, res) {
 	const names = list.map(item => item.name);
 	const domains = list.map(item => item.domain);
 	const path = req.protocol + "://" + req.headers.host + req.originalUrl;
-	const resolve_info = await db.accessCountQuery()
-	const hotlist = await db.hotlistQuery()
 	res.render("danmaku", {
 		path,
 		urls,
 		names,
 		domains,
-		resolve_info,
-		hotlist
 	});
 }
+
+router.get("/api/home-data", async (req, res) => {
+    try {
+        const [resolve_info, hotlist] = await Promise.all([
+            db.accessCountQuery(),
+            db.hotlistQuery()
+        ]);
+        res.json({ resolve_info, hotlist });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "查询失败" });
+    }
+});
 
 /* GET home page. */
 router.get("/", async function (req, res) {
