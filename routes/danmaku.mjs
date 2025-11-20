@@ -1,18 +1,13 @@
-const express = require("express");
-const axios = require("axios");
+import express from "express";
+import axios from "axios";
+import { createSourceList } from "./sources.mjs";
+import memory from "../utils/memory.js";
+import db from "../utils/db.js";
+import { inflateRawSync } from "zlib";
+
+
 const router = express.Router();
-const URL = require("url");
-const {
-	bilibili,
-	mgtv,
-	tencentvideo,
-	youku,
-	iqiyi,
-	gamer,
-} = require("./api/base");
-const list = [bilibili, mgtv, tencentvideo, youku, iqiyi, gamer];
-const memory = require("../utils/memory");
-const db = require("../utils/db");
+const list = createSourceList();
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
 // 返回对象{msg: "ok", title: "标题", content: []}
@@ -81,10 +76,10 @@ async function resolve(req, res) {
 	// 记录视频信息
 	db.videoInfoInsert({url,title:ret.title})
 	//B站视频，直接重定向
-	if (ret.url)
+	if (ret.url) {
 		res.redirect(ret.url);
-	else {
-		res.set('Cache-Control', 'public, max-age=86400'); // one year
+	} else {
+		res.set('Cache-Control', 'public, max-age=86400'); // 缓存一天
 		res.render("danmaku-xml", { contents: ret.content });
 	}
 }
@@ -131,4 +126,5 @@ router.get("/delete", async function (req, res) {
 	res.send(`成功请求删除三个月以前的记录，删除情况请查看日志`);
 });
 
-module.exports = router;
+// module.exports = router;
+export default router;

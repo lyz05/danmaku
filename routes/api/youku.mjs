@@ -1,19 +1,22 @@
-const urlmodule = require('url');
-const axios = require('axios');
-const cookie = require('cookie');
-const crypto = require('crypto');
-const { content_template } = require('./utils');
+import urlmodule from "url";
+import axios from "axios";
+import BaseSource from "./base.mjs";
+import cookie from "cookie";
+import crypto from "crypto";
 
-function Youku() {
-  this.name = '优酷';
-  this.domain = 'v.youku.com';
-  this.example_urls = [
-    'https://v.youku.com/v_show/id_XNTE5NjUxNjUyOA==.html',
-    'https://v.youku.com/v_show/id_XMTc1OTE4ODI5Ng==.html',
-    'https://v.youku.com/v_show/id_XNTkxNDY2Nzg2MA==.html'
-  ];
+export default class YoukuSource extends BaseSource {
+  constructor() {
+    super();
+    this.name = '优酷';
+    this.domain = 'v.youku.com';
+    this.example_urls = [
+      'https://v.youku.com/v_show/id_XNTE5NjUxNjUyOA==.html',
+      'https://v.youku.com/v_show/id_XMTc1OTE4ODI5Ng==.html',
+      'https://v.youku.com/v_show/id_XNTkxNDY2Nzg2MA==.html'
+    ];
+  }
 
-  this.get_tk_enc = async () => {
+  async get_tk_enc() {
     const api_url = 'https://acs.youku.com/h5/mtop.com.youku.aplatform.weakget/1.0/?jsv=2.5.1&appKey=24679788';
     let cookies = undefined;
     // 服务端可能报错:"x-retcode": "FAIL_SYS_INTERNAL_FAULT"
@@ -26,8 +29,8 @@ function Youku() {
       targetCookie = Object.assign(targetCookie, cookie.parse(cookieStr));
     }
     return targetCookie;
-  };
-  this.get_cna = async () => {
+  }
+  async get_cna() {
     const api_url = 'https://log.mmstat.com/eg.js';
     const res = await axios.get(api_url);
     const cookies = res.headers['set-cookie'];
@@ -36,22 +39,22 @@ function Youku() {
       targetCookie = Object.assign(targetCookie, cookie.parse(cookieStr));
     }
     return targetCookie['cna'];
-  };
+  }
 
-  const yk_msg_sign = (msg) => {
+  yk_msg_sign(msg) {
     const md5 = crypto.createHash('md5');
     return md5.update(msg + 'MkmC9SoIw6xCkSKHhJ7b5D2r51kBiREr')
       .digest('hex');
-  };
+  }
 
-  const yk_t_sign = (token, t, appkey, data) => {
+  yk_t_sign(token, t, appkey, data) {
     const text = [token, t, appkey, data].join('&');
     const md5 = crypto.createHash('md5');
     return md5.update(text)
       .digest('hex');
-  };
+  }
 
-  const get_vinfos_by_video_id = async (url) => {
+  async get_vinfos_by_video_id(url) {
     const q = urlmodule.parse(url, true);
     const path = q.pathname.split('/');
     const video_id = path.slice(-1)[0].split('.')[0].slice(3);
@@ -70,9 +73,9 @@ function Youku() {
       console.log('video_id:', video_id, 'duration:', duration, 'title:', this.title);
       return [video_id, duration];
     }
-  };
+  }
 
-  this.resolve = async (url) => {
+  async resolve(url) {
     const cna = await this.get_cna();
     const tk_enc = await this.get_tk_enc();
     const headers = {
@@ -81,7 +84,7 @@ function Youku() {
       'Referer': 'https://v.youku.com',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
     };
-    const [vid, duration] = await get_vinfos_by_video_id(url);
+    const [vid, duration] = await this.get_vinfos_by_video_id(url);
 
     const max_mat = Math.floor(duration / 60) + 1;
     let promises = [];
@@ -104,14 +107,14 @@ function Youku() {
       const buff = Buffer.from(str, 'utf-8');
       const msg_b64encode = buff.toString('base64');
       msg['msg'] = msg_b64encode;
-      msg['sign'] = yk_msg_sign(msg_b64encode);
+      msg['sign'] = this.yk_msg_sign(msg_b64encode);
       const data = JSON.stringify(msg);
       const t = Date.now();
       const params = {
         'jsv': '2.5.6',
         'appKey': '24679788',
         't': t,
-        'sign': yk_t_sign(tk_enc['_m_h5_tk'].slice(0, 32), t, '24679788', data),
+        'sign': this.yk_t_sign(tk_enc['_m_h5_tk'].slice(0, 32), t, '24679788', data),
         'api': 'mopen.youku.danmu.list',
         'v': '1.0',
         'type': 'originaljson',
@@ -125,9 +128,9 @@ function Youku() {
       }));
     }
     return promises;
-  };
+  }
 
-  this.parse = async (promises) => {
+  async parse(promises) {
     let contents = [];
     const results = await Promise.allSettled(promises);
     let datas = results.filter(result => result.status === 'fulfilled')
@@ -142,7 +145,7 @@ function Youku() {
       // 接口请求情况
       // console.log(i, res.ret[0])
       for (const danmu of danmus) {
-        const content = JSON.parse(JSON.stringify(content_template));
+        const content = JSON.parse(JSON.stringify(this.content_template));
         content.timepoint = danmu['playat'] / 1000;
         if (danmu.propertis.color) {
           content.color = JSON.parse(danmu.propertis).color;
@@ -153,27 +156,17 @@ function Youku() {
     }
     // contents = make_response(contents);
     return contents;
-  };
+  }
 
-  this.work = async (url) => {
-    const promises = await this.resolve(url);
-    console.log(this.name, 'api lens:', promises.length);
-    this.content = await this.parse(promises);
-    return {
-      title: this.title,
-      content: this.content,
-      msg: 'ok'
-    };
-  };
 }
 
-module.exports = Youku;
+// module.exports = Youku;
 
-if (!module.parent) {
-  const b = new Youku();
-  b.work(b.example_urls[2])
-    .then(() => {
-      // console.log(b.content);
-      console.log(b.title);
-    });
-}
+// if (!module.parent) {
+//   const b = new Youku();
+//   b.work(b.example_urls[2])
+//     .then(() => {
+//       // console.log(b.content);
+//       console.log(b.title);
+//     });
+// }

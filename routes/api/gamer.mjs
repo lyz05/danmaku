@@ -1,16 +1,20 @@
-const urlmodule = require("url");
-const axios = require("axios");
-const {time_to_second, content_template} = require("./utils");
+import urlmodule from "url";
+import axios from "axios";
+import BaseSource from "./base.mjs";
 
-function Gamer() {
-	this.name = "巴哈姆特動畫瘋";
-	this.domain = "gamer.com.tw";
-	this.example_urls = [
-		"https://ani.gamer.com.tw/animeVideo.php?sn=41645",
-		"https://ani.gamer.com.tw/animeVideo.php?sn=41889"
-	];
+export default class GamerSource extends BaseSource {
 
-	this.resolve = async (url) => {
+	constructor() {
+		super();
+		this.name = "巴哈姆特動畫瘋";
+		this.domain = "gamer.com.tw";
+		this.example_urls = [
+			"https://ani.gamer.com.tw/animeVideo.php?sn=41645",
+			"https://ani.gamer.com.tw/animeVideo.php?sn=41889"
+		];
+	}
+
+	async resolve(url) {
 		// 相关API
 		const api_video_info = "https://api.gamer.com.tw/anime/v1/video.php";
 		const api_danmu = "https://api.gamer.com.tw/anime/v1/danmu.php";
@@ -42,7 +46,7 @@ function Gamer() {
 
 	};
 
-	this.parse = async (promises) => {
+	async parse(promises) {
 		//筛选出成功的请求
 		let datas = (await Promise.allSettled(promises))
 			.filter(x => x.status === "fulfilled")
@@ -51,7 +55,7 @@ function Gamer() {
 		for (let i = 0; i < datas.length; i++) {
 			const data = datas[i].data;
 			for (const item of data.danmu) {
-				const content = JSON.parse(JSON.stringify(content_template));
+				const content = JSON.parse(JSON.stringify(this.content_template));
 				content.timepoint = item.time / 10;
 				content.content = item.text;
 				content.uid = item.userid;
@@ -63,23 +67,13 @@ function Gamer() {
 		return contents;
 	}
 
-	this.work = async (url) => {
-        const promises = await this.resolve(url);
-		console.log(this.name, "api lens:", promises.length);
-		this.content = await this.parse(promises);
-		return {
-			title: this.title,
-			content: this.content,
-			msg: this.error_msg? this.error_msg: "ok"
-		};
-	};
 }
 
-module.exports = Gamer;
+// module.exports = Gamer;
 
-if(!module.parent) {
-	const g = new Gamer();
-    g.work(g.example_urls[0]).then(res=>{
-        console.log(res)
-    });
-}
+// if(!module.parent) {
+// 	const g = new Gamer();
+//     g.work(g.example_urls[0]).then(res=>{
+//         console.log(res)
+//     });
+// }

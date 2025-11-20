@@ -1,8 +1,9 @@
-let chai = require("chai");
-let chaiHttp = require("chai-http");
-let app = require("../app");
-const { bilibili, mgtv, tencentvideo, youku, iqiyi, gamer } = require("../routes/api/base");
-const list = [bilibili, mgtv, tencentvideo, youku, iqiyi, gamer];
+import chai from "chai";
+import chaiHttp from "chai-http";
+import app from "../app.js";
+import { createSourceList } from "../routes/sources.mjs";
+
+const list = createSourceList();
 chai.should();
 chai.use(chaiHttp);
 
@@ -43,14 +44,15 @@ describe("App", () => {
 					chai.request(app)
 						.get("/")
 						.query({url})
+						.redirects(0)
 						.end((err, res) => {
-							if (err) {
-								//B站弹幕获取会遇到解压错误
-								err.code.should.equal("Z_DATA_ERROR")
-							}
 							if (res) {
-								res.should.have.status(200);
-								res.header["content-type"].should.equal("application/xml; charset=utf-8");
+								if (name === "B站") {
+									res.should.redirect;
+								} else {
+									res.should.have.status(200);
+									res.header["content-type"].should.equal("application/xml; charset=utf-8");
+								}
 							}
 							done();
 						});

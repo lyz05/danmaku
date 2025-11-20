@@ -9,8 +9,10 @@ require("dotenv")
 	.config();
 
 // 引入一个个路由模块
-const danmakuRouter = require("./routes/danmaku");
+const danmakuRouter = require("./routes/danmaku.mjs").default;
 const app = express();
+// 加载路由
+app.use("/", danmakuRouter);
 // 启用gzip压缩
 app.use(compression());
 
@@ -33,8 +35,7 @@ app.use("/assets", [
 	express.static(__dirname + "/node_modules/leancloud-storage/dist",{maxAge: 86400*1000}),
 ]);
 
-// 加载路由
-app.use("/", danmakuRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

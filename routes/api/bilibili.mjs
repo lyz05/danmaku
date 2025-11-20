@@ -1,17 +1,21 @@
-const urlmodule = require("url");
-const axios = require("axios");
+import urlmodule from "url";
+import axios from "axios";
+import BaseSource from "./base.mjs";
 
-function Bilibili() {
-	this.name = "B站";
-	this.domain = "bilibili.com";
-	this.example_urls = [
-		"https://www.bilibili.com/video/av170001",
-		"https://www.bilibili.com/video/av170001?p=2",
-		"https://www.bilibili.com/video/BV17x411w7KC?p=3",
-		"https://www.bilibili.com/bangumi/play/ep691614"
-	];
+export default class BilibiliSource extends BaseSource {
+	constructor() {
+		super();
+		this.name = "B站";
+		this.domain = "bilibili.com";
+		this.example_urls = [
+			"https://www.bilibili.com/video/av170001",
+			"https://www.bilibili.com/video/av170001?p=2",
+			"https://www.bilibili.com/video/BV17x411w7KC?p=3",
+			"https://www.bilibili.com/bangumi/play/ep691614"
+		];
+	}
 
-	this.resolve = async (url) => {
+	async resolve(url) {
 		// 相关API
 		const api_video_info = "https://api.bilibili.com/x/web-interface/view";
 		const api_epid_cid = "https://api.bilibili.com/pgc/view/web/season";
@@ -60,7 +64,7 @@ function Bilibili() {
 
 	};
 
-	this.work = async (url) => {
+	async work(url) {
 		const urls = await this.resolve(url);
 		if (!this.error_msg) {
 			this.url = urls[0];
@@ -73,12 +77,16 @@ function Bilibili() {
 	};
 }
 
-module.exports = Bilibili;
+// module.exports = Bilibili;
 
-if(!module.parent) {
-	const b = new Bilibili();
-	b.work(b.example_urls[0]).then(() => {
-		console.log(b.content);
-		console.log(b.title);
-	});
-}
+// if(!module.parent) {
+// 	const b = new Bilibili();
+// 	b.work(b.example_urls[0]).then(() => {
+// 		console.log(b.content);
+// 		console.log(b.title);
+// 	});
+// }
+// 判断是否直接运行当前文件（跨平台）
+// if (fileURLToPath(import.meta.url) === process.argv[1]) {
+//   console.log("单独运行")
+// }

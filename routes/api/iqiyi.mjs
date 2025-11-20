@@ -1,21 +1,21 @@
-const axios = require("axios");
-const pako = require("pako");
-const {
-    time_to_second,
-    content_template,
-} = require("./utils");
-const memory = require("../../utils/memory");
+import axios from "axios";
+import BaseSource from "./base.mjs";
+import pako from "pako";
+import memory from "../../utils/memory.js";
 
-function Iqiyi() {
-    this.name = "爱奇艺";
-    this.domain = "iqiyi.com";
-    this.example_urls = [
-        "https://www.iqiyi.com/v_bb6gsxzz78.html",
-        "https://www.iqiyi.com/v_19rr1lm35o.html",
-    ];
+export default class IqiyiSource extends BaseSource {
+    constructor() {
+        super();
+        this.name = "爱奇艺";
+        this.domain = "iqiyi.com";
+        this.example_urls = [
+            "https://www.iqiyi.com/v_bb6gsxzz78.html",
+            "https://www.iqiyi.com/v_19rr1lm35o.html",
+        ];
+    }
 
     // 新的tvid获取方法
-    this.get_tvid = async (url) => {
+    async get_tvid(url) {
         const id = /v_(\w+)/.exec(url)[1];
         const api = `https://pcw-api.iq.com/api/decode/${id}?platformId=3&modeCode=intl&langCode=sg`;
         const response = await axios.get(api);
@@ -23,13 +23,13 @@ function Iqiyi() {
     };
 
     // 获取视频基础信息
-    this.get_video_info = async (tvid) => {
+    async get_video_info(tvid) {
         const api = `https://pcw-api.iqiyi.com/video/video/baseinfo/${tvid}`;
         const response = await axios.get(api);
         return response.data.data;
     };
 
-    this.resolve = async (url) => {
+    async resolve(url) {
         // 1. 获取tvid
         const tvid = await this.get_tvid(url);
         
@@ -68,21 +68,21 @@ function Iqiyi() {
         return promises;
     };
 
-    function extract(xml, tag) {
+    extract(xml, tag) {
         const reg = new RegExp(`<${tag}>(.*?)</${tag}>`, "g");
         const res = xml.match(reg)
             ?.map(x => x.substring(tag.length + 2, x.length - tag.length - 3));
         return res || [];
     }
 
-    this.xml2json = (xml, contents, length) => {
-        const danmaku = extract(xml, "content");
-        const showTime = extract(xml, "showTime");
-        const color = extract(xml, "color");
+    xml2json(xml, contents, length) {
+        const danmaku = this.extract(xml, "content");
+        const showTime = this.extract(xml, "showTime");
+        const color = this.extract(xml, "color");
 
         const step = Math.ceil(danmaku.length * length / 10000);
         for (let i = 0; i < danmaku.length; i += step) {
-            const content = JSON.parse(JSON.stringify(content_template));
+            const content = JSON.parse(JSON.stringify(this.content_template));
             content.timepoint = showTime[i];
             content.color = parseInt(color[i], 16);
             content.content = danmaku[i];
@@ -91,7 +91,7 @@ function Iqiyi() {
         }
     };
 
-    this.parse = async (promises) => {
+    async parse(promises) {
         memory();
         let datas = (await Promise.allSettled(promises))
             .filter(x => x.status === "fulfilled")
@@ -110,25 +110,15 @@ function Iqiyi() {
         return contents;
     };
 
-    this.work = async (url) => {
-        const promises = await this.resolve(url);
-        console.log(this.name, "api lens:", promises.length);
-        this.content = await this.parse(promises);
-        return {
-            title: this.title,
-            content: this.content,
-            msg: "ok"
-        };
-    };
 }
 
-module.exports = Iqiyi;
+// module.exports = Iqiyi;
 
-if (!module.parent) {
-    const m = new Iqiyi();
-    m.work(m.example_urls[0])
-        .then(() => {
-            console.log(m.title);
-            memory();
-        });
-}
+// if (!module.parent) {
+//     const m = new Iqiyi();
+//     m.work(m.example_urls[0])
+//         .then(() => {
+//             console.log(m.title);
+//             memory();
+//         });
+// }

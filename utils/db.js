@@ -125,24 +125,24 @@ async function deleteAccess() {
   }
 }
 
-async function main() {
-  const ret = await deleteAccess();
-  console.log(ret);
-}
+// async function main() {
+//   const ret = await deleteAccess();
+//   console.log(ret);
+// }
 
-if (!module.parent) {
-  accessInsert({
-    'ip': '127.0.0.1',
-    'url': 'https://www.mgtv.com/b/336727/8087768.html',
-    'UA': 'PostmanRuntime/7.37.3'
-  });
+// if (!module.parent) {
+//   accessInsert({
+//     'ip': '127.0.0.1',
+//     'url': 'https://www.mgtv.com/b/336727/8087768.html',
+//     'UA': 'PostmanRuntime/7.37.3'
+//   });
 
-  videoInfoInsert({
-    'url': 'https://www.mgtv.com/b/336727/8087768.html',
-    'title': '婚前21天'
-  });
+//   videoInfoInsert({
+//     'url': 'https://www.mgtv.com/b/336727/8087768.html',
+//     'title': '婚前21天'
+//   });
 
-  main();
-}
+//   main();
+// }
 
 module.exports = { errorInsert, accessInsert, accessCountQuery, videoInfoInsert, hotlistQuery, deleteAccess };
