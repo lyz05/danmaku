@@ -22,6 +22,10 @@ export default class MgtvSource extends BaseSource {
 		const cid = path.slice(-2)[0];
 		const vid = path.slice(-1)[0].split(".")[0];
 		const res = await axios.get(api_video_info, {params: {cid, vid}});
+		if (res.data.code !== 200) {
+			this.error_msg = this.name + " API: " + api_video_info + "请求失败，错误信息: " + res.data.msg;
+			return null;
+		}
 		this.title = res.data.data.info.videoName;
 		const time = res.data.data.info.time;
 

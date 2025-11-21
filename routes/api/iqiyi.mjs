@@ -105,7 +105,6 @@ export default class IqiyiSource extends BaseSource {
             datas[i] = null;
             xml = null;
             if (global.gc) global.gc();
-            memory();
         }
         return contents;
     };

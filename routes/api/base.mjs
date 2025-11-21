@@ -41,7 +41,7 @@ export default class BaseSource {
     async work(url) {
         const promises = await this.resolve(url);
         if (!this.error_msg) {
-		    console.log(this.name, "api lens:", promises.length);
+		    console.log(this.name, "API lens:", promises.length);
 		    this.content = await this.parse(promises);
         }
 		return {

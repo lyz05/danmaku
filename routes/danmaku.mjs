@@ -22,9 +22,9 @@ async function build_response(url, req) {
 			maxRedirects: 10
 		});
 		url = response.request.res.responseUrl || url;
-        console.log("Real url:", url);
+        console.log("重定向后最终URL:", url);
 	} catch (e) {
-		console.log(e);
+		console.log("尝试打开传入页面失败" + e.message);
 		// 如果是 403 错误，不报错，继续执行
 		if (e.response && e.response.status === 403) {
 			console.log("访问视频页面 403 错误，有可能被防火墙拦了");
@@ -48,7 +48,7 @@ async function build_response(url, req) {
 	try {
 		ret = await fc.work(url);
 	} catch (e) {
-		console.log(e);
+		console.log("全局错误捕获，详情查阅数据库" + e.message);
 		let err = JSON.stringify(e, Object.getOwnPropertyNames(e));
 		db.errorInsert({
 			ip: req.ip,
