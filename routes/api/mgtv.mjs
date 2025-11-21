@@ -38,11 +38,8 @@ export default class MgtvSource extends BaseSource {
 		return promises;
 	}
 
-	async parse(promises) {
+	async parse(datas) {
 		let contents = [];
-		const results = await Promise.allSettled(promises);
-		let datas = results.filter(result => result.status === 'fulfilled')
-			.map(result => result.value.data);
 		for (const data of datas) {
 			if (data.data.items === null)
 				continue;

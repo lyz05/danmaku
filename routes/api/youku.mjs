@@ -130,12 +130,8 @@ export default class YoukuSource extends BaseSource {
     return promises;
   }
 
-  async parse(promises) {
+  async parse(datas) {
     let contents = [];
-    const results = await Promise.allSettled(promises);
-    let datas = results.filter(result => result.status === 'fulfilled')
-      .map(result => result.value.data);
-
     for (const res of datas) {
       const result = JSON.parse(res.data.result);
       if (result.code === '-1') {

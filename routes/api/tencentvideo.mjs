@@ -48,12 +48,8 @@ export default class TencentvideoSource extends BaseSource {
 		return promises;
 	}
 
-	async parse(promises) {
+	async parse(datas) {
 		let contents = [];
-		const results = await Promise.allSettled(promises);
-		let datas = results.filter(result => result.status === 'fulfilled')
-			.map(result => result.value.data);
-
 		for (const data of datas) {
 			for (const item of data.barrage_list) {
 				const content = JSON.parse(JSON.stringify(this.content_template));

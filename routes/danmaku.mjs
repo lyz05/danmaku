@@ -1,10 +1,7 @@
 import express from "express";
 import axios from "axios";
 import { createSourceList } from "./sources.mjs";
-import memory from "../utils/memory.js";
 import db from "../utils/db.js";
-import { inflateRawSync } from "zlib";
-
 
 const router = express.Router();
 const list = createSourceList();
@@ -48,7 +45,7 @@ async function build_response(url, req) {
 	try {
 		ret = await fc.work(url);
 	} catch (e) {
-		console.log("全局错误捕获，详情查阅数据库" + e.message);
+		console.log("全局错误捕获，详情查阅数据库", e);
 		let err = JSON.stringify(e, Object.getOwnPropertyNames(e));
 		db.errorInsert({
 			ip: req.ip,
@@ -64,7 +61,6 @@ async function resolve(req, res) {
 	const url = req.query.url;
 	const download = (req.query.download === "on");
 	const ret = await build_response(url, req);
-	memory(); //显示内存使用量
 	if (ret.msg !== "ok") {
 		res.status(403).send(ret.msg);
 		return;

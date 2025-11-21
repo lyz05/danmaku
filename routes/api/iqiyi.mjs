@@ -1,7 +1,6 @@
 import axios from "axios";
 import BaseSource from "./base.mjs";
 import pako from "pako";
-import memory from "../../utils/memory.js";
 
 export default class IqiyiSource extends BaseSource {
     constructor() {
@@ -91,12 +90,7 @@ export default class IqiyiSource extends BaseSource {
         }
     };
 
-    async parse(promises) {
-        memory();
-        let datas = (await Promise.allSettled(promises))
-            .filter(x => x.status === "fulfilled")
-            .map(x => x.value.data);
-        memory();
+    async parse(datas) {
         let contents = [];
         for (let i = 0; i < datas.length; i++) {
             const data = datas[i];
@@ -118,6 +112,5 @@ export default class IqiyiSource extends BaseSource {
 //     m.work(m.example_urls[0])
 //         .then(() => {
 //             console.log(m.title);
-//             memory();
 //         });
 // }

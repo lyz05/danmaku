@@ -46,11 +46,7 @@ export default class GamerSource extends BaseSource {
 
 	};
 
-	async parse(promises) {
-		//筛选出成功的请求
-		let datas = (await Promise.allSettled(promises))
-			.filter(x => x.status === "fulfilled")
-			.map(x => x.value.data);
+	async parse(datas) {
 		let contents = [];
 		for (let i = 0; i < datas.length; i++) {
 			const data = datas[i].data;
