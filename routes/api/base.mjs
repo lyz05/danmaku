@@ -1,4 +1,5 @@
 import { filesize } from "filesize";
+import pLimit from 'p-limit';
 
 export default class BaseSource {
     // 构造函数，初始化通用配置
@@ -53,14 +54,14 @@ export default class BaseSource {
     async work(url) {
         const promises = await this.resolve(url);
         if (!this.error_msg) {
-		    console.log(this.name, "API lens:", promises.length);
             this.memory(); //显示内存使用量
             // 并发请求弹幕数据，等待所有请求完成。
             let datas = (await Promise.allSettled(promises))
                 .filter(x => x.status === "fulfilled")
-                .map(x => x.value.data);
+                .map(x => x.value.data || x.value.body); //同时兼容 axios 和 got 的返回值结构
             this.memory(); //显示内存使用量
-		    this.content = await this.parse(datas);
+            console.log(this.name, "API lens:", promises.length,"API fulfilled:", datas.length, "比例:", ((datas.length / promises.length) * 100).toFixed(2) + "%");
+            this.content = await this.parse(datas);
         }
 		return {
 			title: this.title,

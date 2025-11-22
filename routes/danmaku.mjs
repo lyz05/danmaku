@@ -76,7 +76,7 @@ async function resolve(req, res) {
 		res.redirect(ret.url);
 	} else {
 		console.log("标题：", ret.title, "弹幕数量:", ret.content.length);
-		res.set('Cache-Control', 'public, max-age=86400'); // 缓存一天
+		// res.set('Cache-Control', 'public, max-age=86400'); // 缓存一天
 		res.render("danmaku-xml", { contents: ret.content });
 	}
 }

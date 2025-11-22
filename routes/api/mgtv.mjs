@@ -1,5 +1,5 @@
 import urlmodule from "url";
-import axios from "axios";
+import got from "got";
 import BaseSource from "./base.mjs";
 
 
@@ -21,19 +21,28 @@ export default class MgtvSource extends BaseSource {
 		const path = q.pathname.split("/");
 		const cid = path.slice(-2)[0];
 		const vid = path.slice(-1)[0].split(".")[0];
-		const res = await axios.get(api_video_info, {params: {cid, vid}});
-		if (res.data.code !== 200) {
-			this.error_msg = this.name + " API: " + api_video_info + "请求失败，错误信息: " + res.data.msg;
+		const res = await got(api_video_info,{
+			searchParams: {cid, vid},
+			responseType: 'json'
+		})
+		if (res.body.code !== 200) {
+			this.error_msg = this.name + " API: " + api_video_info + "请求失败，错误信息: " + res.body.msg;
 			return null;
 		}
-		this.title = res.data.data.info.videoName;
-		const time = res.data.data.info.time;
+		this.title = res.body.data.info.videoName;
+		const time = res.body.data.info.time;
 
 		const step = 60 * 1000;
 		const end_time = this.time_to_second(time) * 1000;
 		let promises = [];
 		for (let i = 0; i < end_time; i += step) {
-			promises.push(axios({method: "get", url: api_danmaku, params: {vid, cid, time: i}}));
+			promises.push(
+				got(api_danmaku, {
+					searchParams: { vid, cid, time: i },
+					timeout: 10000,
+					responseType: 'json'
+				})
+			);
 		}
 		return promises;
 	}
