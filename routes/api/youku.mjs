@@ -143,8 +143,9 @@ export default class YoukuSource extends BaseSource {
       for (const danmu of danmus) {
         const content = JSON.parse(JSON.stringify(this.content_template));
         content.timepoint = danmu['playat'] / 1000;
-        if (danmu.propertis.color) {
-          content.color = JSON.parse(danmu.propertis).color;
+        const propertis = JSON.parse(danmu.propertis);
+        if (propertis.color) {
+          content.color = propertis.color;
         }
         content.content = danmu.content;
         contents.push(content);
