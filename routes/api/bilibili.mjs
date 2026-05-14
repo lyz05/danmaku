@@ -12,14 +12,16 @@ export default class BilibiliSource extends BaseSource {
 			"https://www.bilibili.com/video/av170001?p=2",
 			"https://www.bilibili.com/video/BV17x411w7KC?p=3",
 			"https://www.bilibili.com/bangumi/play/ep691614",
-            "https://www.bilibili.com/bangumi/play/ep2636828"
+			"https://www.bilibili.com/bangumi/play/ep2636828",
+			"https://www.bilibili.com/cheese/play/ep229832"
 		];
 	}
 
 	async resolve(url) {
 		// 相关API
 		const api_video_info = "https://api.bilibili.com/x/web-interface/view";
-		const api_epid_cid = "https://api.bilibili.com/pgc/view/web/season";
+		const api_bangumi_season = "https://api.bilibili.com/pgc/view/web/season";
+		const api_cheese_season = "https://api.bilibili.com/pugv/view/web/season";
 		const q = urlmodule.parse(url, true);
 		const path = q.pathname.split("/");
 		// 普通投稿视频
@@ -47,7 +49,7 @@ export default class BilibiliSource extends BaseSource {
 		else if (url.indexOf("bangumi/") !== -1 && url.indexOf("ep") !== -1) {
 			const epid = path.slice(-1)[0];
 			const params = {"ep_id": epid.slice(2)};
-			const response = await axios.get(api_epid_cid, {params});
+			const response = await axios.get(api_bangumi_season, {params});
 			if (response.data.code !== 0) {
 				this.error_msg = "获取番剧视频信息失败！";
 				return;
@@ -73,8 +75,25 @@ export default class BilibiliSource extends BaseSource {
                 }
             }
 			this.error_msg = "未找到对应的番剧视频信息！";
+		} // 课程
+		else if (url.indexOf("cheese/") !== -1 && url.indexOf("ep") !== -1) {
+			const epid = path.slice(-1)[0];
+			const params = {"ep_id": epid.slice(2)};
+			const response = await axios.get(api_cheese_season, {params});
+			if (response.data.code !== 0) {
+				this.error_msg = "获取课程视频信息失败！";
+				return;
+			}
+			for (let i = 0; i < response.data.data.episodes.length; i++) {
+				if (response.data.data.episodes[i].id == params.ep_id) {
+					this.title = response.data.data.episodes[i].title;
+					const cid = response.data.data.episodes[i].cid;
+					return [`https://comment.bilibili.com/${cid}.xml`];
+				}
+			}
+			this.error_msg = "未找到对应的课程视频信息！";
 		} else {
-			this.error_msg = "不支持的B站视频网址，仅支持普通视频(av,bv)、剧集视频(ep)";
+			this.error_msg = "不支持的B站视频网址，仅支持普通视频(av,bv)、剧集/课程视频(ep)";
 		}
 
 	};
